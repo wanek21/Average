@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "986979668921",
+    "firebase_url": "https://cululator.firebaseio.com",
+    "project_id": "cululator",
+    "storage_bucket": "cululator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986979668921:android:bd052de5c282bce1",
+        "android_client_info": {
+          "package_name": "wanek.average"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986979668921-pv9i4jmocrooilpj9sgdc457qgiteti1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwIsci2s9YHhQ6VMpOB2lVbXWI9AtBNCk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-9940096249715523~4395113228"
+    }
+  ],
+  "configuration_version": "1"
+}
