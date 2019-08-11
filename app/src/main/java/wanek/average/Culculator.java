@@ -1,25 +1,28 @@
 package wanek.average;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.multidex.MultiDex;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+
+import com.ncapdevi.fragnav.FragNavController;
+
+import java.util.ArrayList;
 
 import io.github.tonnyl.whatsnew.WhatsNew;
 import io.github.tonnyl.whatsnew.item.WhatsNewItem;
@@ -29,29 +32,58 @@ public class Culculator extends AppCompatActivity{ // ca-app-pub-150733305831030
                                                    // ca-app-pub-1507333058310304/6657740130 - идент. рекламного блока
                                                    // device ID CC3FD7DFEF4BA9E928027A5C27443739
 
-    Toolbar toolbar;
     ConstraintLayout mainLayout;
-    ViewPager viewPager;
     SharedPreferences sharedPreferences;
-    MyPageAdapter myPageAdapter;
-    LinearLayout culcLayout;
-    int COLOR_ITEM = 0;
+    FrameLayout frameLayout;
+    FragmentManager fragmentManager;
+    Fragment fragmentCulculator;
+    Fragment fragmentInfo;
+    FragmentTransaction fragmentTransaction;
     Window window;
     final String[] chooseColor = {"Тема 1","Тема 2","Тема 3","Тема 4", "Тема 5", "Тема 6","Тема 7","Тема 8"};
+    final String TAG_1 = "FRAGMENT_1";
+    final String TAG_2 = "FRAGMENT_2";
+    final String TAG_3 = "FRAGMENT_3";
+    int COLOR_ITEM = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_culculator);
 
-        viewPager = findViewById(R.id.pager);
         mainLayout = findViewById(R.id.main);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Калькулятор оценок");
-        myPageAdapter = new MyPageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myPageAdapter);
-        viewPager.setCurrentItem(1);
+        frameLayout = findViewById(R.id.container);
 
+        fragmentManager = getFragmentManager();
+        fragmentCulculator = new FragmentCulculator();
+        fragmentInfo = new FragmentInfo();
+        ArrayList<Fragment> fragmentsList = new ArrayList<>(3);
+        fragmentsList.add(fragmentCulculator);
+        fragmentsList.add(fragmentInfo);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.container,fragmentInfo,TAG_2);
+        fragmentTransaction.add(R.id.container,fragmentCulculator,TAG_1);
+        fragmentTransaction.commit();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.culc_action:
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.show(fragmentCulculator);
+                        fragmentTransaction.hide(fragmentInfo);
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.info_action:
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.show(fragmentInfo);
+                        fragmentTransaction.hide(fragmentCulculator);
+                        fragmentTransaction.commit();
+                }
+                return true;
+            }
+        });
         // что нового
         WhatsNew whatsNew = WhatsNew.newInstance(
                 new WhatsNewItem("Правила вывода оценок в аттестат", "Смахните экран вправо, чтобы узнать по какому принципу выставляются оценки"),
@@ -65,7 +97,7 @@ public class Culculator extends AppCompatActivity{ // ca-app-pub-150733305831030
         window = this.getWindow();
 
         getColorItem();
-        setColorTop();
+        //setColorTop();
     }
 
     @Override
@@ -74,8 +106,8 @@ public class Culculator extends AppCompatActivity{ // ca-app-pub-150733305831030
         MultiDex.install(this);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+    /*public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation_bar_items, menu);
         return true;
     }
 
@@ -95,7 +127,7 @@ public class Culculator extends AppCompatActivity{ // ca-app-pub-150733305831030
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
     protected Dialog onCreateDialog(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Culculator.this);
         builder.setTitle("Тема оформления")
@@ -162,162 +194,162 @@ public class Culculator extends AppCompatActivity{ // ca-app-pub-150733305831030
         }
     }
     public void setColorViews() { // установка цвета для фона и кнопок
-        View viewOfFragmentCulc = myPageAdapter.getRegisteredFragment(1).getView();
-        View viewOfFragmentInfo = myPageAdapter.getRegisteredFragment(0).getView();
+        /*View viewOfFragmentCulc = myPageAdapter.getRegisteredFragment(1).getView();
+        View viewOfFragmentInfo = myPageAdapter.getRegisteredFragment(0).getView();*/
 
         switch(COLOR_ITEM) {
-            case 0: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 0: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark0));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark0));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_0));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_0));
                     break;
-            case 1: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 1: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                            .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark1));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark1));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_1));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_1));
                     break;
-            case 2: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 2: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark2));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark2));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_2));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_2));
                     break;
-            case 3: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 3: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark3));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark3));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_3));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_3));
                     break;
-            case 4: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 4: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                     .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark4));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark4));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_4));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_4));
                     break;
-            case 5: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 5: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                     .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark5));
-                    viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                             .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark5));
-                    viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
-                    viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
-                    viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
-                    viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
+                    fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_5));
+                    fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
+                    fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
+                    fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_5));
                     break;
-            case 6: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 6: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                     .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark6));
-                viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                         .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark6));
-                viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
-                viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
-                viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
-                viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
+                fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_6));
+                fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
+                fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
+                fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_6));
                 break;
-            case 7: viewOfFragmentCulc.findViewById(R.id.culcLayout)
+            case 7: fragmentCulculator.getView().findViewById(R.id.culcLayout)
                     .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark7));
-                viewOfFragmentInfo.findViewById(R.id.infoLayout)
+                fragmentInfo.getView().findViewById(R.id.infoLayout)
                         .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark7));
-                viewOfFragmentCulc.findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
-                viewOfFragmentCulc.findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
-                viewOfFragmentCulc.findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
-                viewOfFragmentCulc.findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
+                fragmentCulculator.getView().findViewById(R.id.button_2).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.button_3).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.button_4).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.button_5).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.btnDel).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.btnDown).setBackground(ContextCompat.getDrawable(this,R.drawable.btn_back_7));
+                fragmentCulculator.getView().findViewById(R.id.line1).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
+                fragmentCulculator.getView().findViewById(R.id.line2).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
+                fragmentCulculator.getView().findViewById(R.id.line3).setBackground(ContextCompat.getDrawable(this,R.drawable.gradient_7));
                 break;
         }
     }
     public void setColorTop() { // установка цвета для статус-бара и toolbar
         switch (COLOR_ITEM) {
-            case 0: toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary0));
+            case 0:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark0));
                 }
                 break;
-            case 1: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary1));
+            case 1:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark1));
                 }
                 break;
-            case 2: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
+            case 2:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark2));
                 }
                 break;
-            case 3: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary3));
+            case 3:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark3));
                 }
                 break;
-            case 4: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary4));
+            case 4:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark4));
                 }
                 break;
-            case 5: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary5));
+            case 5:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark5));
                 }
                 break;
-            case 6: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary6));
+            case 6:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark6));
                 }
                 break;
-            case 7: toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary7));
+            case 7:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark7));
                 }

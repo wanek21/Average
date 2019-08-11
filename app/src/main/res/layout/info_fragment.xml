@@ -98,6 +98,6 @@
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="10dp"
         app:layout_constraintBottom_toBottomOf="parent"></View>
 </android.support.constraint.ConstraintLayout>

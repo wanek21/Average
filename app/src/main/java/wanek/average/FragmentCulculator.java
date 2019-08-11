@@ -1,11 +1,11 @@
 package wanek.average;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
@@ -78,6 +78,7 @@ public class FragmentCulculator extends Fragment {
         width = display.getWidth();
         height = display.getHeight();
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        setRetainInstance(true);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.culculator_fragment,container,false);
