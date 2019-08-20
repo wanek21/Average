@@ -1,7 +1,5 @@
 package wanek.average;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 public class HandleNotes {

@@ -1,14 +1,17 @@
 package wanek.average;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDelegate;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.TooltipCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,7 +22,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FragmentCulculator extends Fragment {
@@ -32,6 +34,7 @@ public class FragmentCulculator extends Fragment {
     TextView button_2;
     Button btnDel;
     Button btnDown;
+    ImageView commentBtn;
     TextView tvScore;
     TextView tvCountFiveForFive;
     TextView tvCountFiveForFour;
@@ -41,21 +44,9 @@ public class FragmentCulculator extends Fragment {
     TextView tvOr;
     ImageView viewLeft;
     TextView viewRight;
-    LinearLayout buttonsLayout;
-    LinearLayout bottomLayout;
     View line1;
-    View line2;
-    View line3;
-    LinearLayout culcLayout;
-    LinearLayout.LayoutParams buttonsLayoutParams;
     ConstraintLayout.LayoutParams notesLeftParams;
     ConstraintLayout.LayoutParams notesRightParams;
-    LinearLayout.LayoutParams button_5Params;
-    LinearLayout.LayoutParams button_4Params;
-    LinearLayout.LayoutParams button_3Params;
-    LinearLayout.LayoutParams button_2Params;
-    LinearLayout.LayoutParams btnDelParams;
-    LinearLayout.LayoutParams btnDownParams;
 
     HandleNotes handleNotes;
     SharedPreferences sharedPreferences;
@@ -77,20 +68,19 @@ public class FragmentCulculator extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         height = display.getHeight();
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("launch",Context.MODE_PRIVATE);
         setRetainInstance(true);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        View view = inflater.inflate(R.layout.culculator_fragment,container,false);
 
-        Typeface type = Typeface.createFromAsset(getActivity().getAssets(),"main.ttf");
+        View view = inflater.inflate(R.layout.culculator5_fragment,container,false);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         tvScore = view.findViewById(R.id.tvScore);
-        tvCountFiveForFive = view.findViewById(R.id.tvCountFiveForFive);
-        tvCountFiveForFour = view.findViewById(R.id.tvCountFiveForFour);
-        tvCountFourForFour= view.findViewById(R.id.tvCountFourForFour);
-        culcLayout = view.findViewById(R.id.culcLayout);
+        tvCountFiveForFive = view.findViewById(R.id.tvFiveForFive);
+        tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
+        tvCountFourForFour= view.findViewById(R.id.tvFourForFour);
+        //culcLayout = view.findViewById(R.id.culcLayout);
         tvOr = view.findViewById(R.id.tvOr);
         button_5 = view.findViewById(R.id.button_5);
         button_4 = view.findViewById(R.id.button_4);
@@ -100,13 +90,11 @@ public class FragmentCulculator extends Fragment {
         btnDown = view.findViewById(R.id.btnDown);
         tvForFive = view.findViewById(R.id.tvForFive);
         tvForFour = view.findViewById(R.id.tvForFour);
-        buttonsLayout = view.findViewById(R.id.buttonsLayout);
-        bottomLayout = view.findViewById(R.id.layourBottom);
+        line1 = view.findViewById(R.id.line1);
         viewLeft = view.findViewById(R.id.view1);
         viewRight = view.findViewById(R.id.view2);
-        line1 = view.findViewById(R.id.line1);
-        line2 = view.findViewById(R.id.line2);
-        line3 = view.findViewById(R.id.line3);
+        commentBtn = view.findViewById(R.id.commentBtn);
+        TooltipCompat.setTooltipText(tvForFive,"Показывает сколько нужно получить пятерок, чтобы вышла 5ка");
 
         button_5.setOnTouchListener(btnOnTouchListener);
         button_4.setOnTouchListener(btnOnTouchListener);
@@ -116,55 +104,33 @@ public class FragmentCulculator extends Fragment {
         btnDown.setOnTouchListener(btnOnTouchListener);
         viewLeft.setOnTouchListener(noteOnTouchListener);
         viewRight.setOnTouchListener(noteOnTouchListener);
-        buttonsLayoutParams = (LinearLayout.LayoutParams) buttonsLayout.getLayoutParams();
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment commentDialogFragment = new CommentDialogFragment("wanek.average");
+                commentDialogFragment.show(getFragmentManager(),Culculator.COMMENT_DIALOG_TAG);
+            }
+        });
         notesLeftParams = (ConstraintLayout.LayoutParams) viewLeft.getLayoutParams();
         notesRightParams = (ConstraintLayout.LayoutParams) viewRight.getLayoutParams();
-        button_2Params = (LinearLayout.LayoutParams) button_2.getLayoutParams();
-        button_3Params = (LinearLayout.LayoutParams) button_3.getLayoutParams();
-        button_4Params = (LinearLayout.LayoutParams) button_4.getLayoutParams();
-        button_5Params = (LinearLayout.LayoutParams) button_5.getLayoutParams();
-        btnDelParams = (LinearLayout.LayoutParams) btnDel.getLayoutParams();
-        btnDownParams = (LinearLayout.LayoutParams) btnDown.getLayoutParams();
 
+        width = width - 32;
         notesLeftParams.width = width / 9;
         notesLeftParams.height = height / 10;
         notesRightParams.width = width - notesLeftParams.width - 9;
         notesRightParams.height = height / 12;
 
-        btnDelParams.leftMargin = width / 30;
-        btnDelParams.rightMargin = width / 30;
-        btnDelParams.bottomMargin = height / 115;
-
-        btnDownParams.leftMargin = width / 30;
-        btnDownParams.rightMargin = width / 30;
-        btnDownParams.bottomMargin = height / 115;
-
-        button_2Params.leftMargin = width / 23;
-        button_2Params.rightMargin = width / 23;
-        button_2Params.bottomMargin = height / 55;
-
-        button_3Params.leftMargin = width / 23;
-        button_3Params.rightMargin = width / 23;
-        button_3Params.bottomMargin = height / 55;
-
-        button_4Params.leftMargin = width / 23;
-        button_4Params.rightMargin = width / 23;
-        button_4Params.bottomMargin = height / 55;
-
-        button_5Params.leftMargin = width / 23;
-        button_5Params.rightMargin = width / 23;
-        button_5Params.bottomMargin = height / 55;
-
         viewLeft.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
         viewRight.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
-        line1.animate().scaleXBy(0.0f).scaleX(width).setDuration(1200).start();
 
-        tvForFive.setTypeface(type);
-        tvForFour.setTypeface(type);
-
-        setColorBackAndButton();
+        if(sharedPreferences.getBoolean("isComment",false) == true) { // если пользователь уже оставил отзыв, то скрываем кнопку
+            commentBtn.setVisibility(View.INVISIBLE);
+        }
 
         return view;
+    }
+    private Spanned textToSpannedWithUnderline(String text) {
+        return android.text.Html.fromHtml("<u>" + text + "</u>");
     }
     private String setTextNote(int note) { // вывод введенных оценок (никогда не трогать, без понятия как это работает)
         switch (note) { // 0 - стереть все, 1 - стереть одну
@@ -207,108 +173,23 @@ public class FragmentCulculator extends Fragment {
             default: return notes;
         }
     }
-    private void setColorBackAndButton() {
-        int colorItem = sharedPreferences.getInt("colorItem",0);
-        switch (colorItem) {
-            case 0: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark0));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_0));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_0));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_0));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_0));
-                break;
-            case 1: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark1));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_1));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_1));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_1));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_1));
-                break;
-            case 2: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark2));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_2));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_2));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_2));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_2));
-                break;
-            case 3: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark3));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_3));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_3));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_3));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_3));
-                break;
-            case 4: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark4));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_4));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_4));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_4));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_4));
-                break;
-            case 5: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark5));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_5));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_5));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_5));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_5));
-                break;
-            case 6: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark6));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_6));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_6));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_6));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_6));
-                break;
-            case 7: culcLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark7));
-                btnDel.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                btnDown.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                button_2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                button_3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                button_4.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                button_5.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.btn_back_7));
-                line1.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_7));
-                line2.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_7));
-                line3.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.gradient_7));
-                break;
-        }
-    }
     View.OnTouchListener btnOnTouchListener = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     v.animate().scaleXBy(1).scaleX(0.9f).scaleYBy(1).scaleY(0.9f).setDuration(30).start();
+                    v.animate().alphaBy(1.0f).alpha(0.9f).setDuration(80).start();
+                    if (!(v.getId() == R.id.btnDel || v.getId() == R.id.btnDown)) {
+                        v.setBackgroundColor(getResources().getColor(R.color.bottomBackColorPressed));
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     v.animate().scaleXBy(0.9f).scaleX(1).scaleYBy(0.9f).scaleY(1).setDuration(80).start();
+                    v.animate().alphaBy(0.9f).alpha(1.0f).setDuration(80).start();
+                    if (!(v.getId() == R.id.btnDel || v.getId() == R.id.btnDown)) {
+                        v.setBackgroundColor(getResources().getColor(R.color.bottomBackColor));
+                    }
                     if (v.getId() == R.id.button_5) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(5)));
                         setTextNote(5);
@@ -343,49 +224,58 @@ public class FragmentCulculator extends Fragment {
             if(tvForFive.getVisibility() == View.VISIBLE) {
                 tvForFive.setVisibility(View.INVISIBLE);
                 tvCountFiveForFive.setVisibility(View.INVISIBLE);
-                line2.setVisibility(View.INVISIBLE);
-                line3.startAnimation(animation);
+                /*line2.setVisibility(View.INVISIBLE);
+                line3.startAnimation(animation);*/
                 tvForFive.startAnimation(animation);
                 tvCountFiveForFive.startAnimation(animation);
             }
 
             animation = AnimationUtils.loadAnimation(getActivity(),R.anim.animforbottom);
 
-            if(bottomLayout.getVisibility() == View.VISIBLE) {
-                bottomLayout.setVisibility(View.INVISIBLE);
+            if(tvOr.getVisibility() == View.VISIBLE) {
+                tvCountFourForFour.setVisibility(View.INVISIBLE);
+                tvOr.setVisibility(View.INVISIBLE);
+                tvCountFiveForFour.setVisibility(View.INVISIBLE);
                 tvForFour.setVisibility(View.INVISIBLE);
-                line2.setVisibility(View.INVISIBLE);
-                line3.setVisibility(View.INVISIBLE);
-                bottomLayout.startAnimation(animation);
+                /*line2.setVisibility(View.INVISIBLE);
+                line3.setVisibility(View.INVISIBLE);*/
+                tvCountFourForFour.startAnimation(animation); //bottomLayout.startAnimation(animation);
+                tvCountFiveForFour.startAnimation(animation);
+                tvOr.startAnimation(animation);
                 tvForFour.startAnimation(animation);
-                line3.startAnimation(animation);
+                //line3.startAnimation(animation);
             }
         } else if(score >= 4.5) {
             tvForFive.setVisibility(View.INVISIBLE);
             tvCountFiveForFive.setVisibility(View.INVISIBLE);
-            bottomLayout.setVisibility(View.INVISIBLE);
+            tvCountFourForFour.setVisibility(View.INVISIBLE);
+            tvOr.setVisibility(View.INVISIBLE);
+            tvCountFiveForFour.setVisibility(View.INVISIBLE);
             tvForFour.setVisibility(View.INVISIBLE);
-            line2.setVisibility(View.INVISIBLE);
-            line3.setVisibility(View.INVISIBLE);
+            /*line2.setVisibility(View.INVISIBLE);
+            line3.setVisibility(View.INVISIBLE);*/
         } else if(score < 4.5 && score >= 3.5) {
-            bottomLayout.setVisibility(View.INVISIBLE);
             tvForFour.setVisibility(View.INVISIBLE);
             tvForFour.setVisibility(View.INVISIBLE);
-
+            tvCountFourForFour.setVisibility(View.INVISIBLE);
+            tvOr.setVisibility(View.INVISIBLE);
+            tvCountFiveForFour.setVisibility(View.INVISIBLE);
             tvForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(handleNotes.getFiveWithFive());
             tvCountFiveForFive.setVisibility(View.VISIBLE);
-            line2.setVisibility(View.VISIBLE);
-            line3.setVisibility(View.INVISIBLE);
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
+            /*line2.setVisibility(View.VISIBLE);
+            line3.setVisibility(View.INVISIBLE);*/
         } else if (score < 3.5) {
             tvForFive.setVisibility(View.VISIBLE);
-            bottomLayout.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(handleNotes.getFiveWithFive());
             tvCountFiveForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFour.setText(handleNotes.getFourWithFive());
-            tvCountFourForFour.setText(handleNotes.getFourWithFour());
-            line2.setVisibility(View.VISIBLE);
-            line3.setVisibility(View.VISIBLE);
+            tvCountFourForFour.setVisibility(View.VISIBLE);
+            tvOr.setVisibility(View.VISIBLE);
+            tvCountFiveForFour.setVisibility(View.VISIBLE);
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
+            tvCountFiveForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFive()));
+            tvCountFourForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFour()));
+            /*line2.setVisibility(View.VISIBLE);
+            line3.setVisibility(View.VISIBLE);*/
             tvForFour.setVisibility(View.VISIBLE);
         }
     }

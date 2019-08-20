@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:weightSum="100">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvScore"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -37,14 +37,14 @@
 
             <View
                 android:id="@+id/line1"
-                android:layout_width="1px"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_width="3dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_gravity="center"/>
+                android:layout_weight="1" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvForFive"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -58,7 +58,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:visibility="invisible"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvCountFiveForFive"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -78,7 +78,7 @@
                 android:layout_weight="1"
                 android:visibility="invisible"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvForFour"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -99,9 +99,9 @@
                 android:layout_weight="13"
                 android:orientation="horizontal"
                 android:weightSum="100"
-                android:visibility="invisible">
+                android:visibility="visible">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCountFiveForFour"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -113,7 +113,7 @@
                     android:textSize="20sp"
                     android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvOr"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -125,7 +125,7 @@
                     app:autoSizeTextType="uniform"
                     android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCountFourForFour"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -164,7 +164,7 @@
                 android:orientation="horizontal"
                 android:weightSum="100">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDown"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -178,7 +178,7 @@
                     android:textColor="#fff"
                     android:gravity="center_vertical|center_horizontal"/>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDel"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -202,7 +202,7 @@
                 android:orientation="horizontal">
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/button_5"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -217,7 +217,7 @@
                     android:textColor="#fff"
                     />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/button_4"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -240,7 +240,7 @@
                 android:weightSum="100"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/button_3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -253,7 +253,7 @@
                     android:translationZ="2dp"
                     android:textColor="#fff"
                     android:gravity="center_vertical|center_horizontal"/>
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/button_2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -296,7 +296,7 @@
 
     </ImageView>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/view2"
         android:layout_width="90dp"
         android:layout_height="48dp"
@@ -311,6 +311,6 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintVertical_bias="0.52">
 
-    </android.support.v7.widget.AppCompatTextView>
+    </androidx.appcompat.widget.AppCompatTextView>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
