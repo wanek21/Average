@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary0">#3F51B5</color>
+    <color name="colorPrimaryDark0">#303F9F</color>
+    <color name="colorAccent0">#ff4081</color>
+
+    <color name="colorPrimary1">#4da698</color>
+    <color name="colorPrimaryDark1">#3A8A7E</color>
+    <color name="colorAccent1">#767BD3</color>
+
+    <color name="colorPrimary2">#9b719e</color>
+    <color name="colorPrimaryDark2">#7C597E</color>
+    <color name="colorAccent2">#4D3F78</color>
+
+    <color name="colorPrimary3">#ffc03a</color>
+    <color name="colorPrimaryDark3">#FFAD00</color>
+    <color name="colorAccent3">#3C13AF</color>
+
+    <color name="colorPrimary4">#421ebf</color>
+    <color name="colorPrimaryDark4">#3714B0</color>
+    <color name="colorAccent4">#90be20</color>
+
+    <color name="colorPrimary5">#505760</color>
+    <color name="colorPrimaryDark5">#474F58</color>
+    <color name="colorAccent5">#F77A55</color>
+
+    <color name="colorPrimary6">#FF8100</color>
+    <color name="colorPrimaryDark6">#FF6A00</color>
+    <color name="colorAccent6">#01939A</color>
+
+    <color name="colorPrimary7">#494269</color>
+    <color name="colorPrimaryDark7">#373152</color>
+    <color name="colorAccent7">#8C86E7</color>
+
+    <color name="colorAccentShadow">#b72154</color>
+    <color name="main">#581dbe</color>
+    <color name="colorMenuBack">#ffffff</color>
+    <color name="colorMenuColor">#000</color>
+
+    <color name="bottomBackColor">#6300EF</color>
+    <color name="bottomBackColorPressed">#8536EC</color>
+    <color name="buttonBackColorDown">#FF5722</color>
+    <color name="buttonBackColorDelete">#F44336</color>
+    <color name="colorStatusBar">#001830</color>
+    <color name="colorFrame">#002241</color>
+    <color name="colorAccent">#00D7DC</color>
+</resources>

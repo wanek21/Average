@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Калькулятор оценок</string>
+    <string name="five">5</string>
+    <string name="four">4</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="Delete">Сбросить</string>
+    <string name="Down">Стереть</string>
+    <string name="comment_dialog">Оставишь отзыв за себя и за Сашку?</string>
+    <string name="ads_dialog">Я быстренько. Написал приложение, где можно заработать деньги, отгадывая загадки.
+        Если интересно, жми глянуть</string>
+    <string name="comment_dialog_no">Позже</string>
+    <string name="comment_dialog_yes">Написать отзыв</string>
+    <string name="ads_dialog_yes">Глянуть</string>
+    <string name="input_five">Чтобы исправить на пятерку, нужно</string>
+    <string name="input_four">Чтобы исправить на четверку, нужно</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3637770884242866/3394028951</string>
+    <string name="notes_info1"><i>Итоговые отметки за 9 класс по русскому языку, математике и двум учебным предметам, сдаваемым по выбору обучающегося, определяются как среднее арифметическое годовой и экзаменационной отметок выпускника и выставляются в аттестат целыми числами в соответствии с правилами математического округления.Итоговые отметки за 9 класс по другим учебным предметам выставляются на основе годовой отметки выпускника за 9 класс.</i></string>
+    <string name="notes_info2"><i>Оценка в аттестат определяется как среднее арифметическое полугодовых (триместровых) и годовых оценок за 10 и 11 класс и выставляются в аттестат целыми числами в соответствии с правилами математического округления. Таким образом, если средняя арифметическая оценка 3,5 или 4,5, то в аттестат выставляется 4 или 5 соответственно. Если выпускник не преодолевает минимальный порог ЕГЭ по русскому языку или по математике, то аттестат ему не выдается. Если выпускник не преодолевает порог ЕГЭ по дополнительному предмету, то его итоговая оценка не изменяется.</i></string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+</resources>
