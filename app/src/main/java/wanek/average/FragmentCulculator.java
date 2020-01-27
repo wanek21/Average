@@ -1,7 +1,9 @@
 package wanek.average;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -10,9 +12,10 @@ import androidx.appcompat.widget.TooltipCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 
 import android.text.Spanned;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,34 +27,41 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class FragmentCulculator extends Fragment {
 
     static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
-    TextView button_5;
-    TextView button_4;
-    TextView button_3;
-    TextView button_2;
-    Button btnDel;
-    Button btnDown;
-    ImageView commentBtn;
-    TextView tvScore;
-    TextView tvCountFiveForFive;
-    TextView tvCountFiveForFour;
-    TextView tvCountFourForFour;
-    TextView tvForFive;
-    TextView tvForFour;
-    TextView tvOr;
-    ImageView viewLeft;
-    TextView viewRight;
-    View line1;
-    ConstraintLayout.LayoutParams notesLeftParams;
-    ConstraintLayout.LayoutParams notesRightParams;
+    private MaterialButton button_5;
+    private MaterialButton button_4;
+    private MaterialButton button_3;
+    private MaterialButton button_2;
+    private Button btnDel;
+    private Button btnDown;
+    private ImageView commentBtn;
+    private ImageView btnSettings;
+    private TextView tvScore;
+    private TextView tvCountFiveForFive;
+    private TextView tvCountFiveForFour;
+    private TextView tvCountFourForFour;
+    private TextView tvForFive;
+    private TextView tvForFour;
+    private TextView tvOr;
+    private ImageView viewLeft;
+    private TextView viewRight;
+    private TextView tvAds21;
+    private ConstraintLayout.LayoutParams notesLeftParams;
+    private ConstraintLayout.LayoutParams notesRightParams;
 
     HandleNotes handleNotes;
     SharedPreferences sharedPreferences;
+    AppUpdateManager appUpdateManager;
 
-    public String notes = "";
     int width;
     int height;
 
@@ -64,11 +74,24 @@ public class FragmentCulculator extends Fragment {
     }
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        handleNotes = new HandleNotes();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        appUpdateManager = AppUpdateManagerFactory.create(getActivity());
+        double roundFive;
+        double roundFour;
+        try {
+            roundFive = Double.valueOf(sharedPreferences.getString("average_round_five","4.5"));
+        } catch (NumberFormatException ex) {
+            roundFive = 4.5;
+        }try {
+            roundFour = Double.valueOf(sharedPreferences.getString("average_round_four","3.5"));
+        } catch (NumberFormatException ex) {
+            roundFour = 3.5;
+        }
+        handleNotes = new HandleNotes(roundFive,roundFour);
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         height = display.getHeight();
-        sharedPreferences = getActivity().getSharedPreferences("launch",Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
         setRetainInstance(true);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -80,7 +103,6 @@ public class FragmentCulculator extends Fragment {
         tvCountFiveForFive = view.findViewById(R.id.tvFiveForFive);
         tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
         tvCountFourForFour= view.findViewById(R.id.tvFourForFour);
-        //culcLayout = view.findViewById(R.id.culcLayout);
         tvOr = view.findViewById(R.id.tvOr);
         button_5 = view.findViewById(R.id.button_5);
         button_4 = view.findViewById(R.id.button_4);
@@ -90,10 +112,24 @@ public class FragmentCulculator extends Fragment {
         btnDown = view.findViewById(R.id.btnDown);
         tvForFive = view.findViewById(R.id.tvForFive);
         tvForFour = view.findViewById(R.id.tvForFour);
-        line1 = view.findViewById(R.id.line1);
         viewLeft = view.findViewById(R.id.view1);
         viewRight = view.findViewById(R.id.view2);
         commentBtn = view.findViewById(R.id.commentBtn);
+        tvAds21 = view.findViewById(R.id.btn21);
+        tvAds21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("adsIsPressed",true);
+                editor.apply();
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "martian.mystery")));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "martian.mystery")));
+                }
+            }
+        });
+        btnSettings = view.findViewById(R.id.btnSettings);
         TooltipCompat.setTooltipText(tvForFive,"Показывает сколько нужно получить пятерок, чтобы вышла 5ка");
 
         button_5.setOnTouchListener(btnOnTouchListener);
@@ -107,8 +143,15 @@ public class FragmentCulculator extends Fragment {
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment commentDialogFragment = new CommentDialogFragment("wanek.average");
+                DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
                 commentDialogFragment.show(getFragmentManager(),Culculator.COMMENT_DIALOG_TAG);
+            }
+        });
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSettings = new Intent(getContext(),SettingsActivity.class);
+                startActivityForResult(intentSettings,1);
             }
         });
         notesLeftParams = (ConstraintLayout.LayoutParams) viewLeft.getLayoutParams();
@@ -123,55 +166,36 @@ public class FragmentCulculator extends Fragment {
         viewLeft.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
         viewRight.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
 
-        if(sharedPreferences.getBoolean("isComment",false) == true) { // если пользователь уже оставил отзыв, то скрываем кнопку
+        if(sharedPreferences.getBoolean("isComment",false)) { // если пользователь уже оставил отзыв, то скрываем кнопку
             commentBtn.setVisibility(View.INVISIBLE);
         }
-
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        appealingToAds();
+    }
+
+    private void appealingToAds() {
+        sharedPreferences = getActivity().getSharedPreferences("launch",MODE_PRIVATE);
+        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed",false);
+        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed",false);
+        if(!adsIsShowed) {
+            MessageDialogFragent messageDialogFragent = new MessageDialogFragent(MessageDialogFragent.ADS_DIALOG);
+            messageDialogFragent.show(getFragmentManager(),"ADS");
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("adsIsShowed",true);
+            editor.apply();
+        }
+        if(!adsIsPressed) {
+            tvAds21.setVisibility(View.VISIBLE);
+        }
+    }
+
     private Spanned textToSpannedWithUnderline(String text) {
         return android.text.Html.fromHtml("<u>" + text + "</u>");
-    }
-    private String setTextNote(int note) { // вывод введенных оценок (никогда не трогать, без понятия как это работает)
-        switch (note) { // 0 - стереть все, 1 - стереть одну
-            case 0: notes = "";
-                    return "";
-            case 1:
-                if (notes.length() > 5) {
-                   if(handleNotes.getCountNotes() < 9) notes = notes.substring(0, notes.length() - 7) + ")/" + String.valueOf(handleNotes.getCountNotes());
-                   else notes = notes.substring(0, notes.length() - 8) + ")/" + String.valueOf(handleNotes.getCountNotes());
-                } else { notes = ""; }
-                return notes;
-            case 2:
-                if(notes.equals("")) {notes = "(2)/1";}
-                else {
-                    if(handleNotes.getCountNotes() < 11) notes = notes.substring(0, notes.length() - 3) + " + 2)/" + String.valueOf(handleNotes.getCountNotes());
-                    else notes = notes.substring(0, notes.length() - 4) + " + 2)/" + String.valueOf(handleNotes.getCountNotes());
-                }
-                return notes;
-            case 3:
-                if(notes.equals("")) {notes = "(3)/1";}
-                else {
-                    if(handleNotes.getCountNotes() < 11) notes = notes.substring(0, notes.length() - 3) + " + 3)/" + String.valueOf(handleNotes.getCountNotes());
-                    else notes = notes.substring(0, notes.length() - 4) + " + 3)/" + String.valueOf(handleNotes.getCountNotes());
-                }
-                return notes;
-            case 4:
-                if(notes.equals("")) {notes = "(4)/1";}
-                else {
-                    if(handleNotes.getCountNotes() < 11) notes = notes.substring(0, notes.length() - 3) + " + 4)/" + String.valueOf(handleNotes.getCountNotes());
-                    else notes = notes.substring(0, notes.length() - 4) + " + 4)/" + String.valueOf(handleNotes.getCountNotes());
-                }
-                return notes;
-            case 5:
-                if(notes.equals("")) {notes = "(5)/1";}
-                else {
-                    if(handleNotes.getCountNotes() < 11) notes = notes.substring(0, notes.length() - 3) + " + 5)/" + String.valueOf(handleNotes.getCountNotes());
-                    else notes = notes.substring(0, notes.length() - 4) + " + 5)/" + String.valueOf(handleNotes.getCountNotes());
-                }
-                return notes;
-            default: return notes;
-        }
     }
     View.OnTouchListener btnOnTouchListener = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
         @Override
@@ -192,26 +216,20 @@ public class FragmentCulculator extends Fragment {
                     }
                     if (v.getId() == R.id.button_5) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(5)));
-                        setTextNote(5);
                     } else if (v.getId() == R.id.button_4) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(4)));
-                        setTextNote(4);
                     } else if (v.getId() == R.id.button_3) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(3)));
-                        setTextNote(3);
                     } else if (v.getId() == R.id.button_2) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(2)));
-                        setTextNote(2);
                     } else if (v.getId() == R.id.btnDown) {
                         if (handleNotes.getAscoreNotes() > 0) {
                             tvScore.setText(String.valueOf(handleNotes.clickDeleteOne()));
                         }
-                        setTextNote(1);
                     } else if (v.getId() == R.id.btnDel) {
                         tvScore.setText(String.valueOf(handleNotes.clickDeleteAll()));
-                        setTextNote(0);
                     }
-                    viewRight.setText(notes);
+                    viewRight.setText(handleNotes.getNotesString());
                     visibilityLayout(handleNotes.getAscoreNotes());
                     break;
             }
@@ -224,8 +242,6 @@ public class FragmentCulculator extends Fragment {
             if(tvForFive.getVisibility() == View.VISIBLE) {
                 tvForFive.setVisibility(View.INVISIBLE);
                 tvCountFiveForFive.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.startAnimation(animation);*/
                 tvForFive.startAnimation(animation);
                 tvCountFiveForFive.startAnimation(animation);
             }
@@ -237,24 +253,19 @@ public class FragmentCulculator extends Fragment {
                 tvOr.setVisibility(View.INVISIBLE);
                 tvCountFiveForFour.setVisibility(View.INVISIBLE);
                 tvForFour.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.setVisibility(View.INVISIBLE);*/
-                tvCountFourForFour.startAnimation(animation); //bottomLayout.startAnimation(animation);
+                tvCountFourForFour.startAnimation(animation);
                 tvCountFiveForFour.startAnimation(animation);
                 tvOr.startAnimation(animation);
                 tvForFour.startAnimation(animation);
-                //line3.startAnimation(animation);
             }
-        } else if(score >= 4.5) {
+        } else if(score >= handleNotes.getRoundFive()) {
             tvForFive.setVisibility(View.INVISIBLE);
             tvCountFiveForFive.setVisibility(View.INVISIBLE);
             tvCountFourForFour.setVisibility(View.INVISIBLE);
             tvOr.setVisibility(View.INVISIBLE);
             tvCountFiveForFour.setVisibility(View.INVISIBLE);
             tvForFour.setVisibility(View.INVISIBLE);
-            /*line2.setVisibility(View.INVISIBLE);
-            line3.setVisibility(View.INVISIBLE);*/
-        } else if(score < 4.5 && score >= 3.5) {
+        } else if(score < handleNotes.getRoundFive() && score >= handleNotes.getRoundFour()) {
             tvForFour.setVisibility(View.INVISIBLE);
             tvForFour.setVisibility(View.INVISIBLE);
             tvCountFourForFour.setVisibility(View.INVISIBLE);
@@ -263,9 +274,7 @@ public class FragmentCulculator extends Fragment {
             tvForFive.setVisibility(View.VISIBLE);
             tvCountFiveForFive.setVisibility(View.VISIBLE);
             tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
-            /*line2.setVisibility(View.VISIBLE);
-            line3.setVisibility(View.INVISIBLE);*/
-        } else if (score < 3.5) {
+        } else if (score < handleNotes.getRoundFour()) {
             tvForFive.setVisibility(View.VISIBLE);
             tvCountFiveForFive.setVisibility(View.VISIBLE);
             tvCountFourForFour.setVisibility(View.VISIBLE);
@@ -274,8 +283,6 @@ public class FragmentCulculator extends Fragment {
             tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
             tvCountFiveForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFive()));
             tvCountFourForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFour()));
-            /*line2.setVisibility(View.VISIBLE);
-            line3.setVisibility(View.VISIBLE);*/
             tvForFour.setVisibility(View.VISIBLE);
         }
     }
@@ -288,7 +295,7 @@ public class FragmentCulculator extends Fragment {
                     try{
                         if(!flag) {
                             ImageView vNext = (ImageView) v;
-                            viewRight.setText(notes);
+                            viewRight.setText(handleNotes.getNotesString());
                             v.animate().translationXBy(0).translationX(-5).start();
                             viewRight.animate().translationXBy(0).translationX(-5).start();
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -313,7 +320,6 @@ public class FragmentCulculator extends Fragment {
                             flag = false;
                         }
                     } catch (ClassCastException ex) {
-                        Log.d("my","Ошибка");
                     }
                     break;
             }

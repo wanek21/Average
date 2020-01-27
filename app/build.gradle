@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "wanek.average"
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 103
-        versionName "3.0"
+        targetSdkVersion 29
+        versionCode 221
+        versionName "5.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -22,14 +22,15 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2' // com.android.support:appcompat-v7:28.0.0
-    implementation 'com.google.android.gms:play-services-ads:18.1.1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3' //com.android.support.constraint:constraint-layout:1.1.3
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.play:core:1.6.4'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.preference:preference:1.1.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0' // com.android.support.test:runner:1.0.2
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0' // com.android.support.test.espresso:espresso-core:3.0.2
-    implementation 'com.google.android.material:material:1.0.0-rc01' // com.android.support:design:28.0.0
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha01'
 }
-
