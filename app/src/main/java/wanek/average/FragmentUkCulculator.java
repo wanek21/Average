@@ -114,7 +114,7 @@ public class FragmentUkCulculator extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
-                commentDialogFragment.show(getFragmentManager(),Culculator.COMMENT_DIALOG_TAG);
+                commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {

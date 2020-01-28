@@ -91,43 +91,55 @@
             android:orientation="horizontal"
             ads:layout_constraintGuide_begin="68dp" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvElevenForEleven"
-            android:layout_width="0dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="7 одиннадцать"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clForEleven"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:visibility="invisible"
-            ads:layout_constraintBottom_toTopOf="@+id/glHorTop2"
+            ads:layout_constraintBottom_toTopOf="@id/glHorTop2"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/tvForEleven"
-            app:autoSizeTextType="uniform" />
+            ads:layout_constraintTop_toBottomOf="@id/glHorTop">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvForEleven"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="До 11-ти:"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:visibility="invisible"
-            ads:layout_constraintBottom_toTopOf="@+id/tvElevenForEleven"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/glHorTop"
-            app:autoSizeTextType="uniform" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvForEleven"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="До 11-ти:"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:visibility="visible"
+                ads:layout_constraintBottom_toTopOf="@+id/tvElevenForEleven"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintStart_toStartOf="parent"
+                ads:layout_constraintTop_toTopOf="parent"
+                app:autoSizeTextType="uniform" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvElevenForEleven"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="7 одиннадцать"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:visibility="visible"
+                ads:layout_constraintBottom_toBottomOf="parent"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintStart_toStartOf="parent"
+                ads:layout_constraintTop_toBottomOf="@+id/tvForEleven"
+                app:autoSizeTextType="uniform" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glHorTop2"
@@ -136,92 +148,104 @@
             android:orientation="horizontal"
             ads:layout_constraintGuide_percent="0.6" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvForEight"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="До 8-ки:"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:visibility="invisible"
-            ads:layout_constraintBottom_toTopOf="@+id/clForEight"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toTopOf="@+id/glHorTop2"
-            app:autoSizeTextType="uniform" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clForEight"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
+            android:visibility="invisible"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/tvForEight">
+            ads:layout_constraintTop_toBottomOf="@id/glHorTop2">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvEightForEight"
+                android:id="@+id/tvForEight"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginBottom="8dp"
-                android:maxLines="1"
-                android:text="9 восьмерок"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="6dp"
+                android:text="До 8-ки:"
                 android:textAlignment="center"
-                android:visibility="invisible"
-                android:textColor="@color/colorAccent"
-                ads:layout_constraintBottom_toBottomOf="parent"
-                ads:layout_constraintEnd_toStartOf="@+id/tvOr"
-                ads:layout_constraintHorizontal_bias="0.5"
-                ads:layout_constraintHorizontal_weight="0.4"
+                android:textColor="#fff"
+                android:visibility="visible"
+                ads:layout_constraintBottom_toTopOf="@+id/clForEight3"
+                ads:layout_constraintEnd_toEndOf="parent"
                 ads:layout_constraintStart_toStartOf="parent"
                 ads:layout_constraintTop_toTopOf="parent"
                 app:autoSizeTextType="uniform" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvOr"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clForEight3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
-                android:maxLines="1"
-                android:text="или"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="21sp"
-                android:visibility="invisible"
-                ads:layout_constraintBottom_toBottomOf="parent"
-                ads:layout_constraintEnd_toStartOf="@+id/tvElevenForEight"
-                ads:layout_constraintHorizontal_bias="0.5"
-                ads:layout_constraintHorizontal_weight="0.2"
-                ads:layout_constraintStart_toEndOf="@+id/tvEightForEight"
-                ads:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvElevenForEight"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:maxLines="1"
-                android:text="3 одиннадцать"
-                android:textAlignment="center"
-                android:visibility="invisible"
-                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="16dp"
                 ads:layout_constraintBottom_toBottomOf="parent"
                 ads:layout_constraintEnd_toEndOf="parent"
-                ads:layout_constraintHorizontal_bias="0.5"
-                ads:layout_constraintHorizontal_weight="0.4"
-                ads:layout_constraintStart_toEndOf="@+id/tvOr"
-                ads:layout_constraintTop_toTopOf="parent"
-                app:autoSizeTextType="uniform" />
+                ads:layout_constraintStart_toStartOf="parent"
+                ads:layout_constraintTop_toBottomOf="@+id/tvForEight">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEightForEight"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
+                    android:text="9 восьмерок"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:visibility="visible"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintEnd_toStartOf="@+id/tvOr"
+                    ads:layout_constraintHorizontal_bias="0.5"
+                    ads:layout_constraintHorizontal_weight="0.4"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent"
+                    app:autoSizeTextType="uniform" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOr"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
+                    android:text="или"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="21sp"
+                    android:visibility="visible"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintEnd_toStartOf="@+id/tvElevenForEight"
+                    ads:layout_constraintHorizontal_bias="0.5"
+                    ads:layout_constraintHorizontal_weight="0.2"
+                    ads:layout_constraintStart_toEndOf="@+id/tvEightForEight"
+                    ads:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvElevenForEight"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
+                    android:text="3 одиннадцать"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:visibility="visible"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintEnd_toEndOf="parent"
+                    ads:layout_constraintHorizontal_bias="0.5"
+                    ads:layout_constraintHorizontal_weight="0.4"
+                    ads:layout_constraintStart_toEndOf="@+id/tvOr"
+                    ads:layout_constraintTop_toTopOf="parent"
+                    app:autoSizeTextType="uniform" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

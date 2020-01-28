@@ -6,8 +6,8 @@ android {
         applicationId "wanek.average"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 221
-        versionName "5.0.5"
+        versionCode 230
+        versionName "5.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true

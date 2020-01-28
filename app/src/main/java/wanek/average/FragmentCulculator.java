@@ -1,6 +1,5 @@
 package wanek.average;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import androidx.appcompat.widget.TooltipCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import android.text.Spanned;
@@ -144,7 +142,7 @@ public class FragmentCulculator extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
-                commentDialogFragment.show(getFragmentManager(),Culculator.COMMENT_DIALOG_TAG);
+                commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {

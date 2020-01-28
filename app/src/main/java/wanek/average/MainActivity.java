@@ -30,20 +30,22 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 
-public class Culculator extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     ConstraintLayout mainLayout;
+    FrameLayout frameLayout;
 
     SharedPreferences sharedPreferences;
-    FrameLayout frameLayout;
     FragmentManager fragmentManager;
     Fragment fragmentCulculator;
     FragmentTransaction fragmentTransaction;
     Window window;
     DialogFragment commentDialogFragment;
+
     private AdView adView;
     private AppUpdateManager appUpdateManager;
     final static String COMMENT_DIALOG_TAG = "comment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

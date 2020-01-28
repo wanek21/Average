@@ -24,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentBackMain = new Intent(SettingsActivity.this,Culculator.class);
+                Intent intentBackMain = new Intent(SettingsActivity.this, MainActivity.class);
                 setResult(RESULT_OK,intentBackMain);
                 finish();
             }

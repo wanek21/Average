@@ -25,7 +25,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -128,7 +127,7 @@ public class FragmentCulculatorWithOne extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
-                commentDialogFragment.show(getFragmentManager(),Culculator.COMMENT_DIALOG_TAG);
+                commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
