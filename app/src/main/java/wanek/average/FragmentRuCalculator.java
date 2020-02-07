@@ -1,8 +1,8 @@
 package wanek.average;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.text.Spanned;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,15 +21,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 
-public class FragmentCulculatorWithOne extends Fragment {
+import static android.content.Context.MODE_PRIVATE;
+
+public class FragmentRuCalculator extends Fragment {
 
     static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
@@ -38,7 +39,6 @@ public class FragmentCulculatorWithOne extends Fragment {
     private MaterialButton button_4;
     private MaterialButton button_3;
     private MaterialButton button_2;
-    private MaterialButton button_1;
     private Button btnDel;
     private Button btnDown;
     private ImageView commentBtn;
@@ -52,25 +52,22 @@ public class FragmentCulculatorWithOne extends Fragment {
     private TextView tvOr;
     private ImageView viewLeft;
     private TextView viewRight;
+    private TextView tvAds21;
     private ConstraintLayout.LayoutParams notesLeftParams;
     private ConstraintLayout.LayoutParams notesRightParams;
 
     HandleNotes handleNotes;
     SharedPreferences sharedPreferences;
+    AppUpdateManager appUpdateManager;
 
     int width;
     int height;
 
-    static FragmentCulculator newInstance(int page) {
-        FragmentCulculator pageFragment = new FragmentCulculator();
-        Bundle arguments = new Bundle();
-        arguments.putInt(ARGUMENT_PAGE_NUMBER, page);
-        pageFragment.setArguments(arguments);
-        return pageFragment;
-    }
+
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        appUpdateManager = AppUpdateManagerFactory.create(getActivity());
         double roundFive;
         double roundFour;
         try {
@@ -86,12 +83,12 @@ public class FragmentCulculatorWithOne extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         height = display.getHeight();
-        sharedPreferences = getActivity().getSharedPreferences("launch",Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
         setRetainInstance(true);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
-        View view = inflater.inflate(R.layout.culculator51_fragment,container,false);
+        View view = inflater.inflate(R.layout.culculator5_fragment,container,false);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         tvScore = view.findViewById(R.id.tvScore);
@@ -103,7 +100,6 @@ public class FragmentCulculatorWithOne extends Fragment {
         button_4 = view.findViewById(R.id.button_4);
         button_3 = view.findViewById(R.id.button_3);
         button_2 = view.findViewById(R.id.button_2);
-        button_1 = view.findViewById(R.id.button_1);
         btnDel = view.findViewById(R.id.btnDel);
         btnDown = view.findViewById(R.id.btnDown);
         tvForFive = view.findViewById(R.id.tvForFive);
@@ -111,6 +107,20 @@ public class FragmentCulculatorWithOne extends Fragment {
         viewLeft = view.findViewById(R.id.view1);
         viewRight = view.findViewById(R.id.view2);
         commentBtn = view.findViewById(R.id.commentBtn);
+        tvAds21 = view.findViewById(R.id.btn21);
+        tvAds21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("adsIsPressed",true);
+                editor.apply();
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "martian.mystery")));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "martian.mystery")));
+                }
+            }
+        });
         btnSettings = view.findViewById(R.id.btnSettings);
         TooltipCompat.setTooltipText(tvForFive,"Показывает сколько нужно получить пятерок, чтобы вышла 5ка");
 
@@ -118,7 +128,6 @@ public class FragmentCulculatorWithOne extends Fragment {
         button_4.setOnTouchListener(btnOnTouchListener);
         button_3.setOnTouchListener(btnOnTouchListener);
         button_2.setOnTouchListener(btnOnTouchListener);
-        button_1.setOnTouchListener(btnOnTouchListener);
         btnDel.setOnTouchListener(btnOnTouchListener);
         btnDown.setOnTouchListener(btnOnTouchListener);
         viewLeft.setOnTouchListener(noteOnTouchListener);
@@ -126,17 +135,13 @@ public class FragmentCulculatorWithOne extends Fragment {
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
+                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,"wanek.average");
                 commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RotateAnimation rotate = new RotateAnimation(0, 270, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate.setDuration(500);
-                rotate.setInterpolator(new LinearInterpolator());
-                btnSettings.startAnimation(rotate);
                 Intent intentSettings = new Intent(getContext(),SettingsActivity.class);
                 startActivityForResult(intentSettings,1);
             }
@@ -156,9 +161,31 @@ public class FragmentCulculatorWithOne extends Fragment {
         if(sharedPreferences.getBoolean("isComment",false)) { // если пользователь уже оставил отзыв, то скрываем кнопку
             commentBtn.setVisibility(View.INVISIBLE);
         }
-
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        appealingToAds();
+    }
+
+    private void appealingToAds() {
+        sharedPreferences = getActivity().getSharedPreferences("launch",MODE_PRIVATE);
+        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed",false);
+        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed",false);
+        if(!adsIsShowed) {
+            MessageDialog messageDialog = new MessageDialog(MessageDialog.ADS_DIALOG);
+            messageDialog.show(getFragmentManager(),"ADS");
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("adsIsShowed",true);
+            editor.apply();
+        }
+        if(!adsIsPressed) {
+            tvAds21.setVisibility(View.VISIBLE);
+        }
+    }
+
     private Spanned textToSpannedWithUnderline(String text) {
         return android.text.Html.fromHtml("<u>" + text + "</u>");
     }
@@ -187,8 +214,6 @@ public class FragmentCulculatorWithOne extends Fragment {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(3)));
                     } else if (v.getId() == R.id.button_2) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(2)));
-                    } else if (v.getId() == R.id.button_1) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(1)));
                     } else if (v.getId() == R.id.btnDown) {
                         if (handleNotes.getAscoreNotes() > 0) {
                             tvScore.setText(String.valueOf(handleNotes.clickDeleteOne()));
@@ -209,8 +234,6 @@ public class FragmentCulculatorWithOne extends Fragment {
             if(tvForFive.getVisibility() == View.VISIBLE) {
                 tvForFive.setVisibility(View.INVISIBLE);
                 tvCountFiveForFive.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.startAnimation(animation);*/
                 tvForFive.startAnimation(animation);
                 tvCountFiveForFive.startAnimation(animation);
             }
@@ -222,13 +245,10 @@ public class FragmentCulculatorWithOne extends Fragment {
                 tvOr.setVisibility(View.INVISIBLE);
                 tvCountFiveForFour.setVisibility(View.INVISIBLE);
                 tvForFour.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.setVisibility(View.INVISIBLE);*/
-                tvCountFourForFour.startAnimation(animation); //bottomLayout.startAnimation(animation);
+                tvCountFourForFour.startAnimation(animation);
                 tvCountFiveForFour.startAnimation(animation);
                 tvOr.startAnimation(animation);
                 tvForFour.startAnimation(animation);
-                //line3.startAnimation(animation);
             }
         } else if(score >= handleNotes.getRoundFive()) {
             tvForFive.setVisibility(View.INVISIBLE);
@@ -292,7 +312,6 @@ public class FragmentCulculatorWithOne extends Fragment {
                             flag = false;
                         }
                     } catch (ClassCastException ex) {
-                        Log.d("my","Ошибка");
                     }
                     break;
             }

@@ -26,7 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentUkCulculator extends Fragment {
+public class FragmentUkCalculator extends Fragment {
 
     private ImageView btnComment;
     private ImageView btnSettings;
@@ -113,7 +113,7 @@ public class FragmentUkCulculator extends Fragment {
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,"wanek.average");
+                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,"wanek.average");
                 commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
@@ -170,8 +170,8 @@ public class FragmentUkCulculator extends Fragment {
         boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed",false);
         boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed",false);
         if(!adsIsShowed) {
-            MessageDialogFragent messageDialogFragent = new MessageDialogFragent(MessageDialogFragent.ADS_DIALOG);
-            messageDialogFragent.show(getFragmentManager(),"ADS");
+            MessageDialog messageDialog = new MessageDialog(MessageDialog.ADS_DIALOG);
+            messageDialog.show(getFragmentManager(),"ADS");
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("adsIsShowed",true);
             editor.apply();

@@ -11,7 +11,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-public class MessageDialogFragent extends DialogFragment {
+public class MessageDialog extends DialogFragment {
 
     String appPackageName;
     int typeMessage;
@@ -20,10 +20,10 @@ public class MessageDialogFragent extends DialogFragment {
     static final int ADS_DIALOG = 2;
     SharedPreferences sharedPreferences;
 
-    public MessageDialogFragent(int typeMessage) {
+    public MessageDialog(int typeMessage) {
         this.typeMessage = typeMessage;
     }
-    public MessageDialogFragent(int typeMessage, String packageName) {
+    public MessageDialog(int typeMessage, String packageName) {
         this.typeMessage = typeMessage;
         this.appPackageName = packageName;
     }

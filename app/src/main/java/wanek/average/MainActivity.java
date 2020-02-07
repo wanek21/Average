@@ -108,11 +108,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         String system = prefs.getString("switch_system","5-бальная");
         if(system.contains("5")) {
             if(prefs.getBoolean("there_is_one",false)) {
-                fragmentCulculator = new FragmentCulculatorWithOne();
-            } else fragmentCulculator = new FragmentCulculator();
+                fragmentCulculator = new FragmentRuCalculatorWithOne();
+            } else fragmentCulculator = new FragmentRuCalculator();
         } else if(system.contains("12")) {
-            fragmentCulculator = new FragmentUkCulculator();
-        }  else fragmentCulculator = new FragmentUkCulculator();
+            fragmentCulculator = new FragmentUkCalculator();
+        }  else fragmentCulculator = new FragmentUkCalculator();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container,fragmentCulculator);
         fragmentTransaction.commit();
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             editor.putInt("countLaunch",sharedPreferences.getInt("countLaunch",0) + 1);
             editor.commit();
         } else if(countLaunch == onCountLaunch){
-            commentDialogFragment = new MessageDialogFragent(MessageDialogFragent.REVIEW_DIALOG,getPackageName());
+            commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,getPackageName());
             commentDialogFragment.show(fragmentManager,COMMENT_DIALOG_TAG);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("countLaunch",sharedPreferences.getInt("countLaunch",0) + 1);

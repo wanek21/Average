@@ -83,43 +83,23 @@ public class HandleNotes {
         return countNotes;
     }
 
-    // методы для 5-бальной системы
-    public String getFiveWithFive() { // сколько нужно получить 5ок, чтобы вышла 5ка
-        int count = 0;
-        int countNotes = this.countNotes;
-        double sumNotes = this.sumNotes;
-        for(;;){
-            count++;
-            countNotes++;
-            sumNotes = sumNotes + 5.0f;
-            if(sumNotes/countNotes >= roundFive) {
-                return textNote(count,5);
-            }
+    public int getHowManyNotes(float withWhat, double whatNeed) {
+        if(whatNeed == 4) {
+            whatNeed = roundFour;
+        } else if(whatNeed == 5) {
+            whatNeed = roundFive;
+        } else {
+            whatNeed -= 0.5;
         }
-    }
-    public String getFourWithFive() { // сколько нужно получить 5ок, чтобы вышла 4ка
         int count = 0;
         int countNotes = this.countNotes;
         double sumNotes = this.sumNotes;
         for(;;){
             count++;
             countNotes++;
-            sumNotes = sumNotes + 5.0f;
-            if(sumNotes/countNotes >= roundFour) {
-                return textNote(count,5);
-            }
-        }
-    }
-    public String getFourWithFour() { // сколько нужно получить 4ок, чтобы вышла 4ка
-        int count = 0;
-        int countNotes = this.countNotes;
-        double sumNotes = this.sumNotes;
-        for(;;){
-            countNotes++;
-            count++;
-            sumNotes = sumNotes + 4.0f;
-            if(sumNotes/countNotes >= roundFour) {
-                return textNote(count,4);
+            sumNotes = sumNotes + withWhat;
+            if(sumNotes/countNotes >= whatNeed) {
+                return count;
             }
         }
     }
@@ -141,47 +121,6 @@ public class HandleNotes {
                 return note + " четверок";
             } else {
                 return note + " пятерок";
-            }
-        }
-    }
-
-    //методы для 12-бальной системы
-    public String getElevenWithEleven() { // сколько нужно получить 11ок, чтобы вышла 11ка
-        int count = 0;
-        int countNotes = this.countNotes;
-        double sumNotes = this.sumNotes;
-        for(;;){
-            count++;
-            countNotes++;
-            sumNotes = sumNotes + 11.0f;
-            if(sumNotes/countNotes >= 10.5) {
-                return textNoteUk(count,11);
-            }
-        }
-    }
-    public String getEightWithEight() { // сколько нужно получить 8ок, чтобы вышла 8ка
-        int count = 0;
-        int countNotes = this.countNotes;
-        double sumNotes = this.sumNotes;
-        for(;;){
-            count++;
-            countNotes++;
-            sumNotes = sumNotes + 8.0f;
-            if(sumNotes/countNotes >= 7.5) {
-                return textNoteUk(count,8);
-            }
-        }
-    }
-    public String getEightWithEleven() { // сколько нужно получить 11ок, чтобы вышла 8ка
-        int count = 0;
-        int countNotes = this.countNotes;
-        double sumNotes = this.sumNotes;
-        for(;;){
-            countNotes++;
-            count++;
-            sumNotes = sumNotes + 11.0f;
-            if(sumNotes/countNotes >= 7.5) {
-                return textNoteUk(count,11);
             }
         }
     }
