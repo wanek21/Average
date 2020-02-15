@@ -6,8 +6,9 @@
     <string name="two">2</string>
     <string name="Delete">Сбросить</string>
     <string name="Down">Стереть</string>
+    <string name="swipe_hint">Проведите пальцем по экрану вниз, чтобы скрыть запись оценок</string>
     <string name="comment_dialog">Оставишь отзыв за себя и за Сашку?</string>
-    <string name="ads_dialog">Даю деньги тому, кто первый отгадает 21 загадку.
+    <string name="ads_dialog">Дарю деньги тому (1500+ рублей), кто первый отгадает 21 загадку.
         Если интересно, жми глянуть</string>
     <string name="comment_dialog_no">Позже</string>
     <string name="comment_dialog_yes">Написать отзыв</string>

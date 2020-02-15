@@ -54,6 +54,7 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
         View view = inflater.inflate(R.layout.culculator51_fragment,container,false);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+        mainLayout = view.findViewById(R.id.mlMain);
         tvScore = view.findViewById(R.id.tvScore);
         tvCountFiveForFive = view.findViewById(R.id.tvFiveForFive);
         tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
@@ -68,8 +69,8 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
         btnDown = view.findViewById(R.id.btnDown);
         tvForFive = view.findViewById(R.id.tvForFive);
         tvForFour = view.findViewById(R.id.tvForFour);
-        viewLeft = view.findViewById(R.id.view1);
-        viewRight = view.findViewById(R.id.view2);
+        viewTop = view.findViewById(R.id.imgTop);
+        tvBottom = view.findViewById(R.id.tvBottom);
         btnComment = view.findViewById(R.id.commentBtn);
         btnSettings = view.findViewById(R.id.btnSettings);
         tvAds21 = view.findViewById(R.id.btn21);
@@ -109,7 +110,7 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
                     } else if (v.getId() == R.id.button_1) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(1)));
                     }
-                    viewRight.setText(handleNotes.getNotesString());
+                    tvBottom.setText(handleNotes.getNotesString());
                     visibilityLayout(handleNotes.getAscoreNotes());
                     break;
             }

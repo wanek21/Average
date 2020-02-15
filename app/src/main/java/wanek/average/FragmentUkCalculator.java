@@ -46,11 +46,12 @@ public class FragmentUkCalculator extends FragmentCaclulator {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.culculator_uk_fragment, container, false);
 
+        mainLayout = view.findViewById(R.id.mlMain);
         btnComment = view.findViewById(R.id.btnComment);
         tvAds21 = view.findViewById(R.id.btn21);
         btnSettings = view.findViewById(R.id.btnSettings);
-        viewLeft = view.findViewById(R.id.view1);
-        viewRight = view.findViewById(R.id.view2);
+        viewTop = view.findViewById(R.id.imgTop);
+        tvBottom = view.findViewById(R.id.tvBottom);
 
         tvCountElevenForEight = view.findViewById(R.id.tvElevenForEight);
         tvCountEightForEight = view.findViewById(R.id.tvEightForEight);
@@ -181,7 +182,7 @@ public class FragmentUkCalculator extends FragmentCaclulator {
                     } else if (v.getId() == R.id.button_1) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(1)));
                     }
-                    viewRight.setText(handleNotes.getNotesString());
+                    tvBottom.setText(handleNotes.getNotesString());
                     visibilityLayout(handleNotes.getAscoreNotes());
                     break;
             }

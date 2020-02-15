@@ -1,37 +1,27 @@
 package wanek.average;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.TooltipCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.preference.PreferenceManager;
 
-import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentRuCalculator extends FragmentCaclulator {
 
+    private MotionLayout mlBottomNote;
     private MaterialButton button_5;
     private MaterialButton button_4;
     private MaterialButton button_3;
@@ -45,6 +35,7 @@ public class FragmentRuCalculator extends FragmentCaclulator {
 
     AppUpdateManager appUpdateManager;
 
+    String TAG = "my";
 
     public void onCreate(Bundle bundle) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -67,8 +58,11 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         View view = inflater.inflate(R.layout.culculator5_fragment,container,false);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+        mainLayout = view.findViewById(R.id.mlMain);
         tvScore = view.findViewById(R.id.tvScore);
+        mlTopNote = view.findViewById(R.id.mlForFive);
         tvCountFiveForFive = view.findViewById(R.id.tvFiveForFive);
+        mlBottomNote = view.findViewById(R.id.mlForFour);
         tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
         tvCountFourForFour= view.findViewById(R.id.tvFourForFour);
         tvOr = view.findViewById(R.id.tvOr);
@@ -80,8 +74,8 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         btnDown = view.findViewById(R.id.btnDown);
         tvForFive = view.findViewById(R.id.tvForFive);
         tvForFour = view.findViewById(R.id.tvForFour);
-        viewLeft = view.findViewById(R.id.view1);
-        viewRight = view.findViewById(R.id.view2);
+        viewTop = view.findViewById(R.id.imgTop);
+        tvBottom = view.findViewById(R.id.tvBottom);
         btnComment = view.findViewById(R.id.commentBtn);
         tvAds21 = view.findViewById(R.id.btn21);
         btnSettings = view.findViewById(R.id.btnSettings);
@@ -94,6 +88,12 @@ public class FragmentRuCalculator extends FragmentCaclulator {
 
         super.onCreateView(inflater,container,bundle);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: here");
     }
 
     View.OnTouchListener onTouchListenerBtnNote = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
@@ -118,7 +118,7 @@ public class FragmentRuCalculator extends FragmentCaclulator {
                     } else if (v.getId() == R.id.button_2) {
                         tvScore.setText(String.valueOf(handleNotes.clickNote(2)));
                     }
-                    viewRight.setText(handleNotes.getNotesString());
+                    tvBottom.setText(handleNotes.getNotesString());
                     visibilityLayout(handleNotes.getAscoreNotes());
                     break;
             }
@@ -126,54 +126,44 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         }
     };
     void visibilityLayout(double score) { // анимация
-        /*Animation animation = AnimationUtils.loadAnimation(getActivity(),R.anim.animfortop);
         if (score == 0) {
-            if(tvForFive.getVisibility() == View.VISIBLE) {
-                tvForFive.setVisibility(View.INVISIBLE);
-                tvCountFiveForFive.setVisibility(View.INVISIBLE);
-                tvForFive.startAnimation(animation);
-                tvCountFiveForFive.startAnimation(animation);
-            }
-
-            animation = AnimationUtils.loadAnimation(getActivity(),R.anim.animforbottom);
-
-            if(tvOr.getVisibility() == View.VISIBLE) {
-                tvCountFourForFour.setVisibility(View.INVISIBLE);
-                tvOr.setVisibility(View.INVISIBLE);
-                tvCountFiveForFour.setVisibility(View.INVISIBLE);
-                tvForFour.setVisibility(View.INVISIBLE);
-                tvCountFourForFour.startAnimation(animation);
-                tvCountFiveForFour.startAnimation(animation);
-                tvOr.startAnimation(animation);
-                tvForFour.startAnimation(animation);
-            }
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
         } else if(score >= handleNotes.getRoundFive()) {
-            tvForFive.setVisibility(View.INVISIBLE);
-            tvCountFiveForFive.setVisibility(View.INVISIBLE);
-            tvCountFourForFour.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountFiveForFour.setVisibility(View.INVISIBLE);
-            tvForFour.setVisibility(View.INVISIBLE);
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
         } else if(score < handleNotes.getRoundFive() && score >= handleNotes.getRoundFour()) {
-            tvForFour.setVisibility(View.INVISIBLE);
-            tvForFour.setVisibility(View.INVISIBLE);
-            tvCountFourForFour.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountFiveForFour.setVisibility(View.INVISIBLE);
-            tvForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
+            mlBottomNote.transitionToStart();
+            mlTopNote.transitionToEnd();
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
         } else if (score < handleNotes.getRoundFour()) {
-            tvForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setVisibility(View.VISIBLE);
-            tvCountFourForFour.setVisibility(View.VISIBLE);
-            tvOr.setVisibility(View.VISIBLE);
-            tvCountFiveForFour.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
-            tvCountFiveForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFive()));
-            tvCountFourForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFour()));
-            tvForFour.setVisibility(View.VISIBLE);
-        }*/
+            mlTopNote.transitionToEnd();
+            mlBottomNote.transitionToEnd();
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
+            tvCountFiveForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,4),5)));
+            tvCountFourForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(4,4),4)));
+        }
+    }
+    public String textNote(int countNote, int noteText) {
+        if(countNote == 1 || ((countNote % 10 == 1) && (countNote != 11))) {
+            if(noteText == 4) {
+                return countNote + " четверка";
+            } else {
+                return countNote + " пятерка";
+            }
+        } else if ((countNote % 10 == 2 || countNote % 10 == 3 || countNote % 10 == 4) && (countNote - countNote % 10 != 10)) {
+            if(noteText == 4) {
+                return countNote + " четверки";
+            } else {
+                return countNote + " пятерки";
+            }
+        } else {
+            if(noteText == 4) {
+                return countNote + " четверок";
+            } else {
+                return countNote + " пятерок";
+            }
+        }
     }
 
 }

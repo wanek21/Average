@@ -2,10 +2,13 @@ package wanek.average;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,20 +30,15 @@ import static android.content.Context.MODE_PRIVATE;
 public abstract class FragmentCaclulator extends Fragment {
 
     MotionLayout mainLayout;
+    MotionLayout mlTopNote;
     ImageView btnComment;
     ImageView btnSettings;
-    ImageView viewLeft;
-    TextView viewRight;
+    ImageView viewTop;
+    TextView tvBottom;
     TextView tvAds21;
     TextView tvScore;
     Button btnDel;
     Button btnDown;
-
-    private int widthScreen;
-    private int heightScreen;
-
-    private ConstraintLayout.LayoutParams notesLeftParams;
-    private ConstraintLayout.LayoutParams notesRightParams;
 
     HandleNotes handleNotes;
     SharedPreferences sharedPreferences;
@@ -48,9 +46,6 @@ public abstract class FragmentCaclulator extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        widthScreen = display.getWidth();
-        heightScreen = display.getHeight();
         sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
         setRetainInstance(true);
     }
@@ -63,7 +58,7 @@ public abstract class FragmentCaclulator extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("adsIsPressed",true);
+                editor.putBoolean("adsIsPressed", true);
                 editor.apply();
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "martian.mystery")));
@@ -75,32 +70,51 @@ public abstract class FragmentCaclulator extends Fragment {
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,"wanek.average");
+                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG, "wanek.average");
                 commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentSettings = new Intent(getContext(),SettingsActivity.class);
-                startActivityForResult(intentSettings,1);
+                Intent intentSettings = new Intent(getContext(), SettingsActivity.class);
+                startActivityForResult(intentSettings, 1);
             }
         });
         btnDel.setOnTouchListener(onTouchListenerDelDown);
         btnDown.setOnTouchListener(onTouchListenerDelDown);
-        viewLeft.setOnTouchListener(noteOnTouchListener);
-        viewRight.setOnTouchListener(noteOnTouchListener);
 
-        notesLeftParams = (ConstraintLayout.LayoutParams) viewLeft.getLayoutParams();
-        notesRightParams = (ConstraintLayout.LayoutParams) viewRight.getLayoutParams();
+        mainLayout.setTransitionListener(new MotionLayout.TransitionListener() {
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int i, int i1) {
+            }
 
-        widthScreen = widthScreen - 32;
-        notesLeftParams.width = widthScreen / 9;
-        notesLeftParams.height = heightScreen / 10;
-        notesRightParams.width = widthScreen - notesLeftParams.width - 9;
-        notesRightParams.height = heightScreen / 12;
-        if(sharedPreferences.getBoolean("isComment",false)) { // если пользователь уже оставил отзыв, то скрываем кнопку
+            @Override
+            public void onTransitionChange(MotionLayout motionLayout, int i, int i1, float v) {
+
+            }
+
+            @Override
+            public void onTransitionCompleted(MotionLayout motionLayout, int i) {
+                if(i == R.id.end) {
+                    viewTop.animate().rotation(180);
+                } else if(i == R.id.start) {
+                    viewTop.animate().rotation(0);
+                }
+            }
+
+            @Override
+            public void onTransitionTrigger(MotionLayout motionLayout, int i, boolean b, float v) {
+
+            }
+        });
+        if (sharedPreferences.getBoolean("isComment", false)) { // если пользователь уже оставил отзыв, то скрываем кнопку
             btnComment.setVisibility(View.INVISIBLE);
+        }
+        sharedPreferences = getActivity().getSharedPreferences("launch",MODE_PRIVATE);
+        int countLaunch = sharedPreferences.getInt("countLaunch",0);
+        if(countLaunch == 1) {
+            tvBottom.setText(R.string.swipe_hint);
         }
         return null;
     }
@@ -112,20 +126,21 @@ public abstract class FragmentCaclulator extends Fragment {
     }
 
     void appealingToAds() {
-        sharedPreferences = getActivity().getSharedPreferences("launch",MODE_PRIVATE);
-        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed",false);
-        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed",false);
-        if(!adsIsShowed) {
+        sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
+        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed", false);
+        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed", false);
+        if (!adsIsShowed) {
             MessageDialog messageDialog = new MessageDialog(MessageDialog.ADS_DIALOG);
-            messageDialog.show(getFragmentManager(),"ADS");
+            messageDialog.show(getFragmentManager(), "ADS");
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("adsIsShowed",true);
+            editor.putBoolean("adsIsShowed", true);
             editor.apply();
         }
-        if(!adsIsPressed) {
+        if (!adsIsPressed) {
             tvAds21.setVisibility(View.VISIBLE);
         }
     }
+
     static FragmentRuCalculator newInstance(int page) {
         FragmentRuCalculator pageFragment = new FragmentRuCalculator();
         Bundle arguments = new Bundle();
@@ -154,55 +169,17 @@ public abstract class FragmentCaclulator extends Fragment {
                     } else if (v.getId() == R.id.btnDel) {
                         tvScore.setText(String.valueOf(handleNotes.clickDeleteAll()));
                     }
-                    viewRight.setText(handleNotes.getNotesString());
+                    tvBottom.setText(handleNotes.getNotesString());
                     visibilityLayout(handleNotes.getAscoreNotes());
                     break;
             }
             return true;
         }
     };
-    View.OnTouchListener noteOnTouchListener = new View.OnTouchListener() { // обработчик касания для вывода оценок
-        boolean flag = false;
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    try{
-                        if(!flag) {
-                            ImageView vNext = (ImageView) v;
-                            viewRight.setText(handleNotes.getNotesString());
-                            v.animate().translationXBy(0).translationX(-5).start();
-                            viewRight.animate().translationXBy(0).translationX(-5).start();
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                vNext.setImageDrawable(getResources().getDrawable(R.drawable.right));
-                            }
-                            flag = true;
-                        } else {
-                            if(v.getId() == R.id.view2) {
-                                v.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
-                                viewLeft.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                    viewLeft.setImageDrawable(getResources().getDrawable(R.drawable.left));
-                                }
-                                flag = false;
-                                break;
-                            }
-                            v.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
-                            viewRight.animate().translationXBy(0).translationX(notesRightParams.width + 9).start();
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                viewLeft.setImageDrawable(getResources().getDrawable(R.drawable.left));
-                            }
-                            flag = false;
-                        }
-                    } catch (ClassCastException ex) {
-                    }
-                    break;
-            }
-            return true;
-        }
-    };
+
     Spanned textToSpannedWithUnderline(String text) {
         return android.text.Html.fromHtml("<u>" + text + "</u>");
     }
+
     abstract void visibilityLayout(double score);
 }

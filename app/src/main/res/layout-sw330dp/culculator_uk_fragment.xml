@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:id="@+id/mlMain"
+    ads:layoutDescription="@xml/main_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -48,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         ads:layout_constraintVertical_weight="0.47"
-        app:layout_constraintBottom_toTopOf="@+id/clNoteRecord"
+        app:layout_constraintBottom_toTopOf="@+id/helperForAnimation"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp">
 
@@ -250,54 +253,47 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clNoteRecord"
+    <View
+        android:id="@+id/helperForAnimation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonsLayout"
+        ads:layout_constraintTop_toBottomOf="@id/clTop"
+        ads:layout_constraintBottom_toTopOf="@id/imgTop"
+        ads:layout_constraintVertical_weight="0"/>
+
+    <ImageView
+        android:id="@+id/imgTop"
+        android:layout_width="19dp"
+        android:layout_height="0dp"
+        ads:srcCompat="@drawable/ic_drop_down"
+        app:layout_constraintBottom_toTopOf="@id/tvBottom"
+        app:layout_constraintEnd_toEndOf="@+id/tvBottom"
+        app:layout_constraintStart_toStartOf="@+id/tvBottom"
+        app:layout_constraintTop_toBottomOf="@id/helperForAnimation"
+        ads:layout_constraintVertical_weight="0.03"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/notes"
+        android:elevation="15dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:translationZ="3dp"
+        ads:layout_constraintTop_toBottomOf="@+id/imgTop"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTop"
-        app:layout_constraintVertical_weight="0.13">
+        ads:layout_constraintVertical_weight="0.1">
 
-        <ImageView
-            android:id="@+id/view1"
-            android:layout_width="36dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginRight="28dp"
-            android:layout_marginBottom="8dp"
-            android:elevation="15dp"
-            ads:layout_constraintBottom_toBottomOf="parent"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.45999998"
-            app:srcCompat="@drawable/left">
-
-        </ImageView>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/view2"
-            android:layout_width="90dp"
-            android:layout_height="0dp"
-            android:background="@drawable/notes"
-            android:elevation="15dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="#fff"
-            ads:layout_constraintBottom_toBottomOf="@+id/view1"
-            ads:layout_constraintStart_toEndOf="@+id/view1"
-            ads:layout_constraintTop_toTopOf="@+id/view1"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintVertical_bias="0.52">
-
-        </androidx.appcompat.widget.AppCompatTextView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.AppCompatTextView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsLayout"
@@ -307,7 +303,7 @@
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintHorizontal_bias="0.5"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/clNoteRecord"
+        ads:layout_constraintTop_toBottomOf="@+id/tvBottom"
         ads:layout_constraintVertical_weight="0.37">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -676,4 +672,4 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="50dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

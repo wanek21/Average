@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mlMain"
+    ads:layoutDescription="@xml/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -55,12 +57,13 @@
         android:id="@+id/clTop"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/helperForAnimation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0.47">
+        app:layout_constraintVertical_weight="0.47"
+        android:foregroundGravity="top">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvScore"
@@ -101,11 +104,12 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.31" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clForFive"
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/mlForFive"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="invisible"
+            android:visibility="visible"
+            app:layoutDescription="@xml/top_anim"
             app:layout_constraintBottom_toTopOf="@id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -135,24 +139,19 @@
                 android:id="@+id/tvFiveForFive"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:text="7 пятерок"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tvForFive"
+                app:layout_constraintStart_toStartOf="@+id/tvForFive"
                 app:layout_constraintTop_toBottomOf="@+id/tvForFive"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
@@ -161,15 +160,15 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.65" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clForFour"
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/mlForFour"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="invisible"
+            app:layoutDescription="@xml/bottom_anim"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clForFive">
+            app:layout_constraintTop_toBottomOf="@+id/mlForFive">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvForFour"
@@ -201,7 +200,6 @@
                 android:text="9 четверок"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvOr"
@@ -220,7 +218,6 @@
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="23sp"
-                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvFiveForFour"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -238,7 +235,6 @@
                 android:text="3 пятерки"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -247,55 +243,51 @@
                 app:layout_constraintTop_toTopOf="@+id/tvOr" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+    <View
+        android:id="@+id/helperForAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        ads:layout_constraintTop_toBottomOf="@id/clTop"
+        ads:layout_constraintBottom_toTopOf="@id/imgTop"
+        ads:layout_constraintVertical_weight="0"/>
+
+    <ImageView
+        android:id="@+id/imgTop"
+        android:layout_width="19dp"
+        android:layout_height="0dp"
+        ads:srcCompat="@drawable/ic_drop_down"
+        app:layout_constraintBottom_toTopOf="@id/tvBottom"
+        app:layout_constraintEnd_toEndOf="@+id/tvBottom"
+        app:layout_constraintStart_toStartOf="@+id/tvBottom"
+        app:layout_constraintTop_toBottomOf="@id/helperForAnimation"
+        ads:layout_constraintVertical_weight="0.03"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBottom"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonsLayout"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/notes"
+        android:elevation="15dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:translationZ="3dp"
+        ads:layout_constraintTop_toBottomOf="@+id/imgTop"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTop"
-        app:layout_constraintVertical_weight="0.13">
+        ads:layout_constraintVertical_weight="0.1">
 
-        <ImageView
-            android:id="@+id/view1"
-            android:layout_width="36dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginRight="28dp"
-            android:elevation="15dp"
-            ads:layout_constraintBottom_toBottomOf="parent"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/left">
-
-        </ImageView>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/view2"
-            android:layout_width="90dp"
-            android:layout_height="48dp"
-            android:background="@drawable/notes"
-            android:elevation="15dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="#fff"
-            ads:layout_constraintBottom_toBottomOf="@+id/view1"
-            ads:layout_constraintStart_toEndOf="@+id/view1"
-            ads:layout_constraintTop_toTopOf="@+id/view1"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintVertical_bias="0.5">
-
-        </androidx.appcompat.widget.AppCompatTextView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.AppCompatTextView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsLayout"
@@ -306,7 +298,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/tvBottom"
         app:layout_constraintVertical_weight="0.4">
 
         <com.google.android.material.button.MaterialButton
@@ -459,4 +451,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
