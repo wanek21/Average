@@ -3,17 +3,13 @@ package wanek.average;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.TooltipCompat;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -29,9 +25,6 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
     private TextView tvCountFiveForFive;
     private TextView tvCountFiveForFour;
     private TextView tvCountFourForFour;
-    private TextView tvForFive;
-    private TextView tvForFour;
-    private TextView tvOr;
 
     public void onCreate(Bundle bundle) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -56,10 +49,11 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
 
         mainLayout = view.findViewById(R.id.mlMain);
         tvScore = view.findViewById(R.id.tvScore);
+        mlTopNote = view.findViewById(R.id.mlForFive);
+        mlBottomNote = view.findViewById(R.id.mlForFour);
         tvCountFiveForFive = view.findViewById(R.id.tvFiveForFive);
         tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
         tvCountFourForFour= view.findViewById(R.id.tvFourForFour);
-        tvOr = view.findViewById(R.id.tvOr);
         button_5 = view.findViewById(R.id.button_5);
         button_4 = view.findViewById(R.id.button_4);
         button_3 = view.findViewById(R.id.button_3);
@@ -67,14 +61,11 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
         button_1 = view.findViewById(R.id.button_1);
         btnDel = view.findViewById(R.id.btnDel);
         btnDown = view.findViewById(R.id.btnDown);
-        tvForFive = view.findViewById(R.id.tvForFive);
-        tvForFour = view.findViewById(R.id.tvForFour);
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
         btnComment = view.findViewById(R.id.commentBtn);
         btnSettings = view.findViewById(R.id.btnSettings);
         tvAds21 = view.findViewById(R.id.btn21);
-        TooltipCompat.setTooltipText(tvForFive,"Показывает сколько нужно получить пятерок, чтобы вышла 5ка");
 
         button_5.setOnTouchListener(onTouchListenerBtnNote);
         button_4.setOnTouchListener(onTouchListenerBtnNote);
@@ -118,59 +109,44 @@ public class FragmentRuCalculatorWithOne extends FragmentCaclulator {
         }
     };
     void visibilityLayout(double score) { // анимация
-        Animation animation = AnimationUtils.loadAnimation(getActivity(),R.anim.animfortop);
         if (score == 0) {
-            if(tvForFive.getVisibility() == View.VISIBLE) {
-                tvForFive.setVisibility(View.INVISIBLE);
-                tvCountFiveForFive.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.startAnimation(animation);*/
-                tvForFive.startAnimation(animation);
-                tvCountFiveForFive.startAnimation(animation);
-            }
-
-            animation = AnimationUtils.loadAnimation(getActivity(),R.anim.animforbottom);
-
-            if(tvOr.getVisibility() == View.VISIBLE) {
-                tvCountFourForFour.setVisibility(View.INVISIBLE);
-                tvOr.setVisibility(View.INVISIBLE);
-                tvCountFiveForFour.setVisibility(View.INVISIBLE);
-                tvForFour.setVisibility(View.INVISIBLE);
-                /*line2.setVisibility(View.INVISIBLE);
-                line3.setVisibility(View.INVISIBLE);*/
-                tvCountFourForFour.startAnimation(animation); //bottomLayout.startAnimation(animation);
-                tvCountFiveForFour.startAnimation(animation);
-                tvOr.startAnimation(animation);
-                tvForFour.startAnimation(animation);
-                //line3.startAnimation(animation);
-            }
-        } /*else if(score >= handleNotes.getRoundFive()) {
-            tvForFive.setVisibility(View.INVISIBLE);
-            tvCountFiveForFive.setVisibility(View.INVISIBLE);
-            tvCountFourForFour.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountFiveForFour.setVisibility(View.INVISIBLE);
-            tvForFour.setVisibility(View.INVISIBLE);
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
+        } else if(score >= handleNotes.getRoundFive()) {
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
         } else if(score < handleNotes.getRoundFive() && score >= handleNotes.getRoundFour()) {
-            tvForFour.setVisibility(View.INVISIBLE);
-            tvForFour.setVisibility(View.INVISIBLE);
-            tvCountFourForFour.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountFiveForFour.setVisibility(View.INVISIBLE);
-            tvForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
+            mlBottomNote.transitionToStart();
+            mlTopNote.transitionToEnd();
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
         } else if (score < handleNotes.getRoundFour()) {
-            tvForFive.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setVisibility(View.VISIBLE);
-            tvCountFourForFour.setVisibility(View.VISIBLE);
-            tvOr.setVisibility(View.VISIBLE);
-            tvCountFiveForFour.setVisibility(View.VISIBLE);
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(handleNotes.getFiveWithFive()));
-            tvCountFiveForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFive()));
-            tvCountFourForFour.setText(textToSpannedWithUnderline(handleNotes.getFourWithFour()));
-            tvForFour.setVisibility(View.VISIBLE);
-        }*/
+            mlTopNote.transitionToEnd();
+            mlBottomNote.transitionToEnd();
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
+            tvCountFiveForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,4),5)));
+            tvCountFourForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(4,4),4)));
+        }
+    }
+    public String textNote(int countNote, int noteText) {
+        if(countNote == 1 || ((countNote % 10 == 1) && (countNote != 11))) {
+            if(noteText == 4) {
+                return countNote + " четверка";
+            } else {
+                return countNote + " пятерка";
+            }
+        } else if ((countNote % 10 == 2 || countNote % 10 == 3 || countNote % 10 == 4) && (countNote - countNote % 10 != 10)) {
+            if(noteText == 4) {
+                return countNote + " четверки";
+            } else {
+                return countNote + " пятерки";
+            }
+        } else {
+            if(noteText == 4) {
+                return countNote + " четверок";
+            } else {
+                return countNote + " пятерок";
+            }
+        }
     }
 }
 

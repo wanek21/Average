@@ -2,14 +2,9 @@ package wanek.average;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -31,6 +25,7 @@ public abstract class FragmentCaclulator extends Fragment {
 
     MotionLayout mainLayout;
     MotionLayout mlTopNote;
+    MotionLayout mlBottomNote;
     ImageView btnComment;
     ImageView btnSettings;
     ImageView viewTop;
@@ -58,7 +53,7 @@ public abstract class FragmentCaclulator extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("adsIsPressed", true);
+                editor.putBoolean("adsIsPressed2", true);
                 editor.apply();
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "martian.mystery")));
@@ -112,7 +107,7 @@ public abstract class FragmentCaclulator extends Fragment {
             btnComment.setVisibility(View.INVISIBLE);
         }
         sharedPreferences = getActivity().getSharedPreferences("launch",MODE_PRIVATE);
-        int countLaunch = sharedPreferences.getInt("countLaunch",0);
+        int countLaunch = sharedPreferences.getInt("countLaunch2",0);
         if(countLaunch == 1) {
             tvBottom.setText(R.string.swipe_hint);
         }
@@ -127,26 +122,18 @@ public abstract class FragmentCaclulator extends Fragment {
 
     void appealingToAds() {
         sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
-        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed", false);
-        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed", false);
+        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed2", false);
+        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed2", false);
         if (!adsIsShowed) {
             MessageDialog messageDialog = new MessageDialog(MessageDialog.ADS_DIALOG);
             messageDialog.show(getFragmentManager(), "ADS");
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("adsIsShowed", true);
+            editor.putBoolean("adsIsShowed2", true);
             editor.apply();
         }
         if (!adsIsPressed) {
             tvAds21.setVisibility(View.VISIBLE);
         }
-    }
-
-    static FragmentRuCalculator newInstance(int page) {
-        FragmentRuCalculator pageFragment = new FragmentRuCalculator();
-        Bundle arguments = new Bundle();
-        arguments.putInt("arg", page);
-        pageFragment.setArguments(arguments);
-        return pageFragment;
     }
 
     View.OnTouchListener onTouchListenerDelDown = new View.OnTouchListener() { // обработчик касания для кнопок-оценок

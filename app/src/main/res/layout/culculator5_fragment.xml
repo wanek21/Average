@@ -5,7 +5,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -104,11 +103,11 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.31" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clForFive"
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/mlForFive"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="invisible"
+            app:layoutDescription="@xml/top_anim"
             app:layout_constraintBottom_toTopOf="@id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +153,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvForFive"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
@@ -163,15 +162,15 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.65" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clForFour"
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/mlForFour"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="invisible"
+            app:layoutDescription="@xml/bottom_anim"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clForFive">
+            app:layout_constraintTop_toBottomOf="@+id/mlForFive">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvForFour"
@@ -185,7 +184,6 @@
                 android:text="До 4-ки:"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +201,6 @@
                 android:text="9 четверок"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvOr"
@@ -221,7 +218,6 @@
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="23sp"
-                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvFiveForFour"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -239,7 +235,6 @@
                 android:text="3 пятерки"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:visibility="visible"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -248,7 +243,7 @@
                 app:layout_constraintTop_toTopOf="@+id/tvOr" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

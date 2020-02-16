@@ -10,19 +10,19 @@
 
     <ConstraintSet android:id="@+id/start">
 
-        <Constraint android:id="@+id/tvForFour">
+        <Constraint android:id="@+id/tvForEight">
             <PropertySet android:alpha="0"/>
         </Constraint>
 
-        <Constraint android:id="@+id/tvFiveForFour">
-            <PropertySet android:alpha="0"/>
-        </Constraint>
-
-        <Constraint android:id="@+id/tvFourForFour">
+        <Constraint android:id="@+id/tvElevenForEight">
             <PropertySet android:alpha="0"/>
         </Constraint>
 
         <Constraint android:id="@+id/tvOr">
+            <PropertySet android:alpha="0"/>
+        </Constraint>
+
+        <Constraint android:id="@+id/tvEightForEight">
             <PropertySet android:alpha="0"/>
         </Constraint>
 
@@ -30,21 +30,22 @@
 
     <ConstraintSet android:id="@+id/end">
 
-        <Constraint android:id="@+id/tvForFour">
+        <Constraint android:id="@+id/tvForEight">
             <PropertySet android:alpha="1"/>
         </Constraint>
 
-        <Constraint android:id="@+id/tvFiveForFour">
-            <PropertySet android:alpha="1"/>
-        </Constraint>
-
-        <Constraint android:id="@+id/tvFourForFour">
+        <Constraint android:id="@+id/tvElevenForEight">
             <PropertySet android:alpha="1"/>
         </Constraint>
 
         <Constraint android:id="@+id/tvOr">
             <PropertySet android:alpha="1"/>
         </Constraint>
+
+        <Constraint android:id="@+id/tvEightForEight">
+            <PropertySet android:alpha="1"/>
+        </Constraint>
+
     </ConstraintSet>
 
 </MotionScene>

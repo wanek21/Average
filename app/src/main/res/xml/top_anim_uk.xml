@@ -10,11 +10,11 @@
 
     <ConstraintSet android:id="@+id/start">
 
-        <Constraint android:id="@+id/tvForFive">
+        <Constraint android:id="@+id/tvForEleven">
             <PropertySet android:alpha="0"/>
         </Constraint>
 
-        <Constraint android:id="@+id/tvFiveForFive">
+        <Constraint android:id="@+id/tvElevenForEleven">
             <PropertySet android:alpha="0"/>
         </Constraint>
 
@@ -22,11 +22,11 @@
 
     <ConstraintSet android:id="@+id/end">
 
-        <Constraint android:id="@+id/tvForFive">
+        <Constraint android:id="@+id/tvForEleven">
             <PropertySet android:alpha="1"/>
         </Constraint>
 
-        <Constraint android:id="@+id/tvFiveForFive">
+        <Constraint android:id="@+id/tvElevenForEleven">
             <PropertySet android:alpha="1"/>
         </Constraint>
 

@@ -18,9 +18,6 @@ public class FragmentUkCalculator extends FragmentCaclulator {
     private TextView tvCountElevenForEleven;
     private TextView tvCountElevenForEight;
     private TextView tvCountEightForEight;
-    private TextView tvForEleven;
-    private TextView tvForEight;
-    private TextView tvOr;
     private Button button_1;
     private Button button_2;
     private Button button_3;
@@ -53,13 +50,12 @@ public class FragmentUkCalculator extends FragmentCaclulator {
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
 
+        mlTopNote = view.findViewById(R.id.mlForEleven);
+        mlBottomNote = view.findViewById(R.id.mlForEight);
         tvCountElevenForEight = view.findViewById(R.id.tvElevenForEight);
         tvCountEightForEight = view.findViewById(R.id.tvEightForEight);
         tvCountElevenForEleven = view.findViewById(R.id.tvElevenForEleven);
-        tvForEleven = view.findViewById(R.id.tvForEleven);
-        tvForEight = view.findViewById(R.id.tvForEight);
         tvScore = view.findViewById(R.id.tvScore);
-        tvOr = view.findViewById(R.id.tvOr);
         button_1 = view.findViewById(R.id.button_1);
         button_2 = view.findViewById(R.id.button_2);
         button_3 = view.findViewById(R.id.button_3);
@@ -93,56 +89,46 @@ public class FragmentUkCalculator extends FragmentCaclulator {
     }
 
     void visibilityLayout(double score) { // анимация
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.animfortop);
         if (score == 0) {
-            if (tvForEleven.getVisibility() == View.VISIBLE) {
-                tvForEleven.setVisibility(View.INVISIBLE);
-                tvCountElevenForEleven.setVisibility(View.INVISIBLE);
-                tvForEleven.startAnimation(animation);
-                tvCountElevenForEleven.startAnimation(animation);
-            }
-
-            animation = AnimationUtils.loadAnimation(getActivity(), R.anim.animforbottom);
-
-            if (tvOr.getVisibility() == View.VISIBLE) {
-                tvCountEightForEight.setVisibility(View.INVISIBLE);
-                tvOr.setVisibility(View.INVISIBLE);
-                tvCountElevenForEight.setVisibility(View.INVISIBLE);
-                tvForEight.setVisibility(View.INVISIBLE);
-                tvCountEightForEight.startAnimation(animation);
-                tvCountElevenForEight.startAnimation(animation);
-                tvOr.startAnimation(animation);
-                tvForEight.startAnimation(animation);
-            }
-        } /*else if(score >= 10.5) {
-            tvForEleven.setVisibility(View.INVISIBLE);
-            tvCountElevenForEleven.setVisibility(View.INVISIBLE);
-            tvCountEightForEight.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountElevenForEight.setVisibility(View.INVISIBLE);
-            tvForEight.setVisibility(View.INVISIBLE);
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
+        } else if(score >= 10.5) {
+            mlTopNote.transitionToStart();
+            mlBottomNote.transitionToStart();
         } else if(score < 10.5 && score >= 7.5) {
-            tvForEight.setVisibility(View.INVISIBLE);
-            tvForEight.setVisibility(View.INVISIBLE);
-            tvCountEightForEight.setVisibility(View.INVISIBLE);
-            tvOr.setVisibility(View.INVISIBLE);
-            tvCountElevenForEight.setVisibility(View.INVISIBLE);
-            tvForEleven.setVisibility(View.VISIBLE);
-            tvCountElevenForEleven.setVisibility(View.VISIBLE);
-            tvCountElevenForEleven.setText(textToSpannedWithUnderline(handleNotes.getElevenWithEleven()));
+            mlBottomNote.transitionToStart();
+            mlTopNote.transitionToEnd();
+            tvCountElevenForEleven.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,11),11)));
         } else if (score < 7.5) {
-            tvForEleven.setVisibility(View.VISIBLE);
-            tvCountElevenForEleven.setVisibility(View.VISIBLE);
-            tvCountEightForEight.setVisibility(View.VISIBLE);
-            tvOr.setVisibility(View.VISIBLE);
-            tvCountElevenForEight.setVisibility(View.VISIBLE);
-            tvCountElevenForEleven.setText(textToSpannedWithUnderline(handleNotes.getElevenWithEleven()));
-            tvCountElevenForEight.setText(textToSpannedWithUnderline(handleNotes.getEightWithEleven()));
-            tvCountEightForEight.setText(textToSpannedWithUnderline(handleNotes.getEightWithEight()));
-            tvForEight.setVisibility(View.VISIBLE);
-        }*/
+            mlTopNote.transitionToEnd();
+            mlBottomNote.transitionToEnd();
+            tvCountElevenForEleven.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,11),11)));
+            tvCountElevenForEight.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,8),11)));
+            tvCountEightForEight.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(8,8),8)));
+        }
     }
 
+    private String textNote(int note, int noteText) {
+        if(note == 1 || ((note % 10 == 1) && (note != 11))) {
+            if(noteText == 11) {
+                return note + " одиннадцать";
+            } else {
+                return note + " восьмерка";
+            }
+        } else if ((note % 10 == 2 || note % 10 == 3 || note % 10 == 4) && (note - note % 10 != 10)) {
+            if(noteText == 11) {
+                return note + " одиннадцать";
+            } else {
+                return note + " восьмерки";
+            }
+        } else {
+            if(noteText == 11) {
+                return note + " одиннадцать";
+            } else {
+                return note + " восьмерок";
+            }
+        }
+    }
     View.OnTouchListener btnOnTouchListener = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
 
         @Override

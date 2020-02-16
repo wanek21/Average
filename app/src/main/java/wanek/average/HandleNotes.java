@@ -103,27 +103,6 @@ public class HandleNotes {
             }
         }
     }
-    private String textNoteUk(int note, int noteText) {
-        if(note == 1 || ((note % 10 == 1) && (note != 11))) {
-            if(noteText == 11) {
-                return note + " одиннадцать";
-            } else {
-                return note + " восьмерка";
-            }
-        } else if ((note % 10 == 2 || note % 10 == 3 || note % 10 == 4) && (note - note % 10 != 10)) {
-            if(noteText == 11) {
-                return note + " одиннадцать";
-            } else {
-                return note + " восьмерки";
-            }
-        } else {
-            if(noteText == 11) {
-                return note + " одиннадцать";
-            } else {
-                return note + " восьмерок";
-            }
-        }
-    }
     public String getNotesString() {
         if(getCountNotes() == 0) return "";
         if(getCountNotes() == 1) return String.valueOf(recordOfNotes.get(0));

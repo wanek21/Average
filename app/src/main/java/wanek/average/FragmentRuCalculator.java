@@ -3,11 +3,8 @@ package wanek.average;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.TooltipCompat;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.preference.PreferenceManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,13 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 
 
 public class FragmentRuCalculator extends FragmentCaclulator {
 
-    private MotionLayout mlBottomNote;
     private MaterialButton button_5;
     private MaterialButton button_4;
     private MaterialButton button_3;
@@ -29,17 +23,11 @@ public class FragmentRuCalculator extends FragmentCaclulator {
     private TextView tvCountFiveForFive;
     private TextView tvCountFiveForFour;
     private TextView tvCountFourForFour;
-    private TextView tvForFive;
-    private TextView tvForFour;
-    private TextView tvOr;
 
-    AppUpdateManager appUpdateManager;
 
-    String TAG = "my";
 
     public void onCreate(Bundle bundle) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        appUpdateManager = AppUpdateManagerFactory.create(getActivity());
         double roundFive;
         double roundFour;
         try {
@@ -65,21 +53,17 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         mlBottomNote = view.findViewById(R.id.mlForFour);
         tvCountFiveForFour = view.findViewById(R.id.tvFiveForFour);
         tvCountFourForFour= view.findViewById(R.id.tvFourForFour);
-        tvOr = view.findViewById(R.id.tvOr);
         button_5 = view.findViewById(R.id.button_5);
         button_4 = view.findViewById(R.id.button_4);
         button_3 = view.findViewById(R.id.button_3);
         button_2 = view.findViewById(R.id.button_2);
         btnDel = view.findViewById(R.id.btnDel);
         btnDown = view.findViewById(R.id.btnDown);
-        tvForFive = view.findViewById(R.id.tvForFive);
-        tvForFour = view.findViewById(R.id.tvForFour);
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
         btnComment = view.findViewById(R.id.commentBtn);
         tvAds21 = view.findViewById(R.id.btn21);
         btnSettings = view.findViewById(R.id.btnSettings);
-        TooltipCompat.setTooltipText(tvForFive,"Показывает сколько нужно получить пятерок, чтобы вышла 5ка");
 
         button_5.setOnTouchListener(onTouchListenerBtnNote);
         button_4.setOnTouchListener(onTouchListenerBtnNote);
@@ -93,7 +77,6 @@ public class FragmentRuCalculator extends FragmentCaclulator {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: here");
     }
 
     View.OnTouchListener onTouchListenerBtnNote = new View.OnTouchListener() { // обработчик касания для кнопок-оценок

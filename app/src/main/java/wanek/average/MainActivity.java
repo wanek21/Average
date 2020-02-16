@@ -119,16 +119,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
     private void appealingToComment(int onCountLaunch) { // метод отвечает за вывод просьбы написать отзыв
         sharedPreferences = getSharedPreferences("launch",MODE_PRIVATE);
-        int countLaunch = sharedPreferences.getInt("countLaunch",0);
+        int countLaunch = sharedPreferences.getInt("countLaunch2",0);
         if(countLaunch < onCountLaunch) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("countLaunch",sharedPreferences.getInt("countLaunch",0) + 1);
+            editor.putInt("countLaunch2",sharedPreferences.getInt("countLaunch2",0) + 1);
             editor.commit();
         } else if(countLaunch == onCountLaunch){
             commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,getPackageName());
             commentDialogFragment.show(fragmentManager,COMMENT_DIALOG_TAG);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("countLaunch",sharedPreferences.getInt("countLaunch",0) + 1);
+            editor.putInt("countLaunch2",sharedPreferences.getInt("countLaunch2",0) + 1);
             editor.commit();
             return;
         }
