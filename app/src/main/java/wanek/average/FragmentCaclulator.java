@@ -30,7 +30,6 @@ public abstract class FragmentCaclulator extends Fragment {
     ImageView btnSettings;
     ImageView viewTop;
     TextView tvBottom;
-    TextView tvAds21;
     TextView tvScore;
     Button btnDel;
     Button btnDown;
@@ -49,19 +48,7 @@ public abstract class FragmentCaclulator extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // этот метод родителя испольуется в конце данного переопределнного метода
-        tvAds21.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("adsIsPressed2", true);
-                editor.apply();
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "martian.mystery")));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "martian.mystery")));
-                }
-            }
-        });
+
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,23 +104,6 @@ public abstract class FragmentCaclulator extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        appealingToAds();
-    }
-
-    void appealingToAds() {
-        sharedPreferences = getActivity().getSharedPreferences("launch", MODE_PRIVATE);
-        boolean adsIsShowed = sharedPreferences.getBoolean("adsIsShowed2", false);
-        boolean adsIsPressed = sharedPreferences.getBoolean("adsIsPressed2", false);
-        if (!adsIsShowed) {
-            MessageDialog messageDialog = new MessageDialog(MessageDialog.ADS_DIALOG);
-            messageDialog.show(getFragmentManager(), "ADS");
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("adsIsShowed2", true);
-            editor.apply();
-        }
-        if (!adsIsPressed) {
-            tvAds21.setVisibility(View.VISIBLE);
-        }
     }
 
     View.OnTouchListener onTouchListenerDelDown = new View.OnTouchListener() { // обработчик касания для кнопок-оценок

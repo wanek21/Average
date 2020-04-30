@@ -62,7 +62,6 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
         btnComment = view.findViewById(R.id.commentBtn);
-        tvAds21 = view.findViewById(R.id.btn21);
         btnSettings = view.findViewById(R.id.btnSettings);
 
         button_5.setOnTouchListener(onTouchListenerBtnNote);

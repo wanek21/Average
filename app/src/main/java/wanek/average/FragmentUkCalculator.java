@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -45,7 +43,6 @@ public class FragmentUkCalculator extends FragmentCaclulator {
 
         mainLayout = view.findViewById(R.id.mlMain);
         btnComment = view.findViewById(R.id.btnComment);
-        tvAds21 = view.findViewById(R.id.btn21);
         btnSettings = view.findViewById(R.id.btnSettings);
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
