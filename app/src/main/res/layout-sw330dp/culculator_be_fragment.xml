@@ -80,17 +80,17 @@
             ads:layout_constraintGuide_percent="0.27" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/mlForEleven"
+            android:id="@+id/mlForNine"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            ads:layoutDescription="@xml/top_anim_uk"
+            ads:layoutDescription="@xml/top_anim_be"
             ads:layout_constraintBottom_toTopOf="@id/glHorTop2"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
             ads:layout_constraintTop_toBottomOf="@id/glHorTop">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvForEleven"
+                android:id="@+id/tvForNine"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
@@ -98,18 +98,18 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="До 11-ти:"
+                android:text="До 9-ки:"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:visibility="visible"
-                ads:layout_constraintBottom_toTopOf="@+id/tvElevenForEleven"
+                ads:layout_constraintBottom_toTopOf="@+id/tvNineForNine"
                 ads:layout_constraintEnd_toEndOf="parent"
                 ads:layout_constraintStart_toStartOf="parent"
                 ads:layout_constraintTop_toTopOf="parent"
                 app:autoSizeTextType="uniform" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvElevenForEleven"
+                android:id="@+id/tvNineForNine"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="8dp"
@@ -117,14 +117,14 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="16dp"
-                android:text="7 одиннадцать"
+                android:text="3 девятки"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:visibility="visible"
                 ads:layout_constraintBottom_toBottomOf="parent"
                 ads:layout_constraintEnd_toEndOf="parent"
                 ads:layout_constraintStart_toStartOf="parent"
-                ads:layout_constraintTop_toBottomOf="@+id/tvForEleven"
+                ads:layout_constraintTop_toBottomOf="@+id/tvForNine"
                 app:autoSizeTextType="uniform" />
 
         </androidx.constraintlayout.motion.widget.MotionLayout>
@@ -137,17 +137,17 @@
             ads:layout_constraintGuide_percent="0.6" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/mlForEight"
+            android:id="@+id/mlForSeven"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutDescription="@xml/bottom_anim_uk"
+            app:layoutDescription="@xml/bottom_anim_be"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mlForEleven">
+            app:layout_constraintTop_toBottomOf="@+id/mlForNine">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvForEight"
+                android:id="@+id/tvForSeven"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
@@ -155,7 +155,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="До 8-ки:"
+                android:text="До 7-ки:"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 app:autoSizeTextType="uniform"
@@ -165,14 +165,14 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvEightForEight"
+                android:id="@+id/tvSevenForSeven"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
                 android:maxLines="1"
-                android:text="9 четверок"
+                android:text="9 семерок"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 app:autoSizeTextType="uniform"
@@ -194,20 +194,20 @@
                 android:textColor="#fff"
                 android:textSize="23sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvElevenForEight"
+                app:layout_constraintEnd_toStartOf="@+id/tvNineForSeven"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/tvEightForEight"
-                app:layout_constraintTop_toBottomOf="@+id/tvForEight" />
+                app:layout_constraintStart_toEndOf="@+id/tvSevenForSeven"
+                app:layout_constraintTop_toBottomOf="@+id/tvForSeven" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvElevenForEight"
+                android:id="@+id/tvNineForSeven"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:maxLines="1"
-                android:text="3 пятерки"
+                android:text="3 девятки"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 app:autoSizeTextType="uniform"
@@ -558,17 +558,16 @@
             ads:layout_constraintHorizontal_bias="0.5"
             ads:layout_constraintStart_toStartOf="parent"
             ads:layout_constraintTop_toTopOf="@+id/glHor3"
-            app:autoSizeTextType="uniform" />
+            app:autoSizeTextType="uniform"
+            ads:layout_constraintHorizontal_chainStyle="packed"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_10"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/btn_note_back"
             android:padding="3dp"
@@ -578,57 +577,9 @@
             ads:cornerRadius="21dp"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintDimensionRatio="1.7:1"
-            ads:layout_constraintEnd_toStartOf="@+id/button_11"
-            ads:layout_constraintHorizontal_bias="0.5"
-            ads:layout_constraintStart_toEndOf="@+id/button_9"
-            ads:layout_constraintTop_toTopOf="@+id/glHor3"
-            app:autoSizeTextType="uniform" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_11"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/btn_note_back"
-            android:padding="3dp"
-            android:text="11"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            ads:cornerRadius="21dp"
-            ads:layout_constraintBottom_toBottomOf="parent"
-            ads:layout_constraintDimensionRatio="1.7:1"
-            ads:layout_constraintEnd_toStartOf="@+id/button_12"
-            ads:layout_constraintHorizontal_bias="0.5"
-            ads:layout_constraintStart_toEndOf="@+id/button_10"
-            ads:layout_constraintTop_toTopOf="@+id/glHor3"
-            app:autoSizeTextType="uniform" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_12"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/btn_note_back"
-            android:padding="3dp"
-            android:text="12"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            ads:cornerRadius="21dp"
-            ads:layout_constraintBottom_toBottomOf="parent"
-            ads:layout_constraintDimensionRatio="1.7:1"
             ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintHorizontal_bias="0.5"
-            ads:layout_constraintStart_toEndOf="@+id/button_11"
+            ads:layout_constraintHorizontal_chainStyle="packed"
+            ads:layout_constraintStart_toEndOf="@+id/button_9"
             ads:layout_constraintTop_toTopOf="@+id/glHor3"
             app:autoSizeTextType="uniform" />
 

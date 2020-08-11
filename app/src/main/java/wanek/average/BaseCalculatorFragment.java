@@ -2,7 +2,6 @@ package wanek.average;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -21,7 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public abstract class FragmentCaclulator extends Fragment {
+/* Базовый фрагмент для всех бальных систем */
+
+public abstract class BaseCalculatorFragment extends Fragment {
 
     MotionLayout mainLayout;
     MotionLayout mlTopNote;
@@ -34,7 +35,7 @@ public abstract class FragmentCaclulator extends Fragment {
     Button btnDel;
     Button btnDown;
 
-    HandleNotes handleNotes;
+    NotesControl notesControl;
     SharedPreferences sharedPreferences;
 
     @Override
@@ -52,7 +53,7 @@ public abstract class FragmentCaclulator extends Fragment {
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG, "wanek.average");
+                DialogFragment commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG, getActivity().getPackageName());
                 commentDialogFragment.show(getFragmentManager(), MainActivity.COMMENT_DIALOG_TAG);
             }
         });
@@ -68,13 +69,10 @@ public abstract class FragmentCaclulator extends Fragment {
 
         mainLayout.setTransitionListener(new MotionLayout.TransitionListener() {
             @Override
-            public void onTransitionStarted(MotionLayout motionLayout, int i, int i1) {
-            }
+            public void onTransitionStarted(MotionLayout motionLayout, int i, int i1) { }
 
             @Override
-            public void onTransitionChange(MotionLayout motionLayout, int i, int i1, float v) {
-
-            }
+            public void onTransitionChange(MotionLayout motionLayout, int i, int i1, float v) { }
 
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, int i) {
@@ -86,9 +84,7 @@ public abstract class FragmentCaclulator extends Fragment {
             }
 
             @Override
-            public void onTransitionTrigger(MotionLayout motionLayout, int i, boolean b, float v) {
-
-            }
+            public void onTransitionTrigger(MotionLayout motionLayout, int i, boolean b, float v) { }
         });
         if (sharedPreferences.getBoolean("isComment", false)) { // если пользователь уже оставил отзыв, то скрываем кнопку
             btnComment.setVisibility(View.INVISIBLE);
@@ -101,12 +97,13 @@ public abstract class FragmentCaclulator extends Fragment {
         return null;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    Spanned textToSpannedWithUnderline(String text) {
+        return android.text.Html.fromHtml("<u>" + text + "</u>");
     }
 
-    View.OnTouchListener onTouchListenerDelDown = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
+    abstract void visibilityLayout(double score);
+
+    View.OnTouchListener onTouchListenerDelDown = new View.OnTouchListener() { // обработчик касания для кнопок стирания и удаления оценок
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -120,23 +117,17 @@ public abstract class FragmentCaclulator extends Fragment {
                     v.animate().alphaBy(0.9f).alpha(1.0f).setDuration(80).start();
 
                     if (v.getId() == R.id.btnDown) {
-                        if (handleNotes.getAscoreNotes() > 0) {
-                            tvScore.setText(String.valueOf(handleNotes.clickDeleteOne()));
+                        if (notesControl.getCurrentAscoreNotes() > 0) {
+                            tvScore.setText(String.valueOf(notesControl.deleteOne()));
                         }
                     } else if (v.getId() == R.id.btnDel) {
-                        tvScore.setText(String.valueOf(handleNotes.clickDeleteAll()));
+                        tvScore.setText(String.valueOf(notesControl.deleteAll()));
                     }
-                    tvBottom.setText(handleNotes.getNotesString());
-                    visibilityLayout(handleNotes.getAscoreNotes());
+                    tvBottom.setText(notesControl.getNotesToString());
+                    visibilityLayout(notesControl.getCurrentAscoreNotes());
                     break;
             }
             return true;
         }
     };
-
-    Spanned textToSpannedWithUnderline(String text) {
-        return android.text.Html.fromHtml("<u>" + text + "</u>");
-    }
-
-    abstract void visibilityLayout(double score);
 }

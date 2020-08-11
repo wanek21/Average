@@ -21,14 +21,9 @@ import androidx.preference.PreferenceManager;
 import android.view.Window;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -43,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     DialogFragment commentDialogFragment;
 
     private AdView adView;
-    private AppUpdateManager appUpdateManager;
     final static String COMMENT_DIALOG_TAG = "comment";
 
     @Override
@@ -51,27 +45,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_culculator);
 
-        appUpdateManager = AppUpdateManagerFactory.create(this);
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+        MobileAds.initialize(this);
 
         adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-            }
-        });
 
         mainLayout = findViewById(R.id.main);
         frameLayout = findViewById(R.id.container);
@@ -80,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(getResources().getColor(R.color.colorStatusBar));
         }
-        setSystem();
-        appealingToComment(7);
+        setPointSystem();
+        askingToComment(7);
     }
 
     @Override
@@ -91,52 +69,48 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        setPointSystem();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        setSystem();
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        setPointSystem(); // при изменении бальной системы в настройках меняем на главной активити
     }
 
-    private void setSystem() {
-        SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
+    private void setPointSystem() { // установка бальной системы на экране
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         fragmentManager = getSupportFragmentManager();
         String system = prefs.getString("switch_system","5-бальная");
         if(system.contains("5")) {
             if(prefs.getBoolean("there_is_one",false)) {
-                fragmentCulculator = new FragmentRuCalculatorWithOne();
-            } else fragmentCulculator = new FragmentRuCalculator();
+                fragmentCulculator = new RuCalculatorWithOneFragment();
+            } else fragmentCulculator = new RuCalculatorFragment();
         } else if(system.contains("12")) {
-            fragmentCulculator = new FragmentUkCalculator();
-        }  else fragmentCulculator = new FragmentUkCalculator();
+            fragmentCulculator = new UkCalculatorFragment();
+        }  else if(system.contains("10")) {
+            fragmentCulculator = new BeCalculatorFragment();
+        }
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container,fragmentCulculator);
         fragmentTransaction.commit();
     }
-    private void appealingToComment(int onCountLaunch) { // метод отвечает за вывод просьбы написать отзыв
+
+    private void askingToComment(int onCountLaunch) { // метод отвечает за вывод просьбы написать отзыв
         sharedPreferences = getSharedPreferences("launch",MODE_PRIVATE);
         int countLaunch = sharedPreferences.getInt("countLaunch2",0);
         if(countLaunch < onCountLaunch) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("countLaunch2",sharedPreferences.getInt("countLaunch2",0) + 1);
-            editor.commit();
+            editor.apply();
         } else if(countLaunch == onCountLaunch){
             commentDialogFragment = new MessageDialog(MessageDialog.REVIEW_DIALOG,getPackageName());
             commentDialogFragment.show(fragmentManager,COMMENT_DIALOG_TAG);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("countLaunch2",sharedPreferences.getInt("countLaunch2",0) + 1);
-            editor.commit();
-            return;
+            editor.apply();
         }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        setSystem(); // при изменении бальной системы в настройках меняем на главной активити
     }
 }
 

@@ -11,11 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class FragmentUkCalculator extends FragmentCaclulator {
 
-    private TextView tvCountElevenForEleven;
-    private TextView tvCountElevenForEight;
-    private TextView tvCountEightForEight;
+public class BeCalculatorFragment extends BaseCalculatorFragment {
+
+    private TextView tvCountNineForNine;
+    private TextView tvCountNineForSeven;
+    private TextView tvCountSevenForSeven;
     private Button button_1;
     private Button button_2;
     private Button button_3;
@@ -26,20 +27,17 @@ public class FragmentUkCalculator extends FragmentCaclulator {
     private Button button_8;
     private Button button_9;
     private Button button_10;
-    private Button button_11;
-    private Button button_12;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        handleNotes = new HandleNotes();
+        notesControl = new NotesControl();
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.culculator_uk_fragment, container, false);
+        View view = inflater.inflate(R.layout.culculator_be_fragment, container, false);
 
         mainLayout = view.findViewById(R.id.mlMain);
         btnComment = view.findViewById(R.id.btnComment);
@@ -47,11 +45,11 @@ public class FragmentUkCalculator extends FragmentCaclulator {
         viewTop = view.findViewById(R.id.imgTop);
         tvBottom = view.findViewById(R.id.tvBottom);
 
-        mlTopNote = view.findViewById(R.id.mlForEleven);
-        mlBottomNote = view.findViewById(R.id.mlForEight);
-        tvCountElevenForEight = view.findViewById(R.id.tvElevenForEight);
-        tvCountEightForEight = view.findViewById(R.id.tvEightForEight);
-        tvCountElevenForEleven = view.findViewById(R.id.tvElevenForEleven);
+        mlTopNote = view.findViewById(R.id.mlForNine);
+        mlBottomNote = view.findViewById(R.id.mlForSeven);
+        tvCountNineForSeven = view.findViewById(R.id.tvNineForSeven);
+        tvCountSevenForSeven = view.findViewById(R.id.tvSevenForSeven);
+        tvCountNineForNine = view.findViewById(R.id.tvNineForNine);
         tvScore = view.findViewById(R.id.tvScore);
         button_1 = view.findViewById(R.id.button_1);
         button_2 = view.findViewById(R.id.button_2);
@@ -63,8 +61,6 @@ public class FragmentUkCalculator extends FragmentCaclulator {
         button_8 = view.findViewById(R.id.button_8);
         button_9 = view.findViewById(R.id.button_9);
         button_10 = view.findViewById(R.id.button_10);
-        button_11 = view.findViewById(R.id.button_11);
-        button_12 = view.findViewById(R.id.button_12);
         btnDel = view.findViewById(R.id.btnDel);
         btnDown = view.findViewById(R.id.btnDown);
 
@@ -78,54 +74,54 @@ public class FragmentUkCalculator extends FragmentCaclulator {
         button_8.setOnTouchListener(btnOnTouchListener);
         button_9.setOnTouchListener(btnOnTouchListener);
         button_10.setOnTouchListener(btnOnTouchListener);
-        button_11.setOnTouchListener(btnOnTouchListener);
-        button_12.setOnTouchListener(btnOnTouchListener);
 
         super.onCreateView(inflater,container,savedInstanceState);
         return view;
     }
 
-    void visibilityLayout(double score) { // анимация
+    @Override
+    void visibilityLayout(double score) {
         if (score == 0) {
             mlTopNote.transitionToStart();
             mlBottomNote.transitionToStart();
-        } else if(score >= 10.5) {
+        } else if(score >= 8.5) {
             mlTopNote.transitionToStart();
             mlBottomNote.transitionToStart();
-        } else if(score < 10.5 && score >= 7.5) {
+        } else if(score < 8.5 && score >= 6.5) {
             mlBottomNote.transitionToStart();
             mlTopNote.transitionToEnd();
-            tvCountElevenForEleven.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,11),11)));
-        } else if (score < 7.5) {
+            tvCountNineForNine.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(9,9),9)));
+        } else if (score < 6.5) {
             mlTopNote.transitionToEnd();
             mlBottomNote.transitionToEnd();
-            tvCountElevenForEleven.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,11),11)));
-            tvCountElevenForEight.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(11,8),11)));
-            tvCountEightForEight.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(8,8),8)));
+            tvCountNineForNine.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(9,9),9)));
+            tvCountNineForSeven.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(9,7),9)));
+            tvCountSevenForSeven.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(7,7),7)));
         }
     }
 
-    private String textNote(int note, int noteText) {
-        if(note == 1 || ((note % 10 == 1) && (note != 11))) {
-            if(noteText == 11) {
-                return note + " одиннадцать";
+    public String textNote(int countNote, int noteText) {
+        if(countNote == 1 || ((countNote % 10 == 1) && (countNote != 11))) {
+            if(noteText == 7) {
+                return countNote + " семёрка";
             } else {
-                return note + " восьмерка";
+                return countNote + " девятка";
             }
-        } else if ((note % 10 == 2 || note % 10 == 3 || note % 10 == 4) && (note - note % 10 != 10)) {
-            if(noteText == 11) {
-                return note + " одиннадцать";
+        } else if ((countNote % 10 == 2 || countNote % 10 == 3 || countNote % 10 == 4) && (countNote - countNote % 10 != 10)) {
+            if(noteText == 7) {
+                return countNote + " семёрки";
             } else {
-                return note + " восьмерки";
+                return countNote + " девятки";
             }
         } else {
-            if(noteText == 11) {
-                return note + " одиннадцать";
+            if(noteText == 7) {
+                return countNote + " семёрок";
             } else {
-                return note + " восьмерок";
+                return countNote + " девяток";
             }
         }
     }
+
     View.OnTouchListener btnOnTouchListener = new View.OnTouchListener() { // обработчик касания для кнопок-оценок
 
         @Override
@@ -140,33 +136,29 @@ public class FragmentUkCalculator extends FragmentCaclulator {
                     v.animate().scaleXBy(0.9f).scaleX(1).scaleYBy(0.9f).scaleY(1).setDuration(80).start();
                     v.animate().alphaBy(0.9f).alpha(1.0f).setDuration(80).start();
                     v.setBackground(getResources().getDrawable(R.drawable.btn_note_back));
-                    if (v.getId() == R.id.button_12) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(12)));
-                    } else if (v.getId() == R.id.button_11) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(11)));
-                    } else if (v.getId() == R.id.button_10) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(10)));
+                    if (v.getId() == R.id.button_10) {
+                        tvScore.setText(String.valueOf(notesControl.addNote(10)));
                     } else if (v.getId() == R.id.button_9) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(9)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(9)));
                     } else if (v.getId() == R.id.button_8) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(8)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(8)));
                     } else if (v.getId() == R.id.button_7) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(7)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(7)));
                     } else if (v.getId() == R.id.button_6) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(6)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(6)));
                     } else if (v.getId() == R.id.button_5) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(5)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(5)));
                     } else if (v.getId() == R.id.button_4) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(4)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(4)));
                     } else if (v.getId() == R.id.button_3) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(3)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(3)));
                     } else if (v.getId() == R.id.button_2) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(2)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(2)));
                     } else if (v.getId() == R.id.button_1) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(1)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(1)));
                     }
-                    tvBottom.setText(handleNotes.getNotesString());
-                    visibilityLayout(handleNotes.getAscoreNotes());
+                    tvBottom.setText(notesControl.getNotesToString());
+                    visibilityLayout(notesControl.getCurrentAscoreNotes());
                     break;
             }
             return true;

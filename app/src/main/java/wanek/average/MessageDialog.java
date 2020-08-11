@@ -13,8 +13,8 @@ import androidx.fragment.app.DialogFragment;
 
 public class MessageDialog extends DialogFragment {
 
-    String appPackageName;
-    int typeMessage;
+    private String appPackageName;
+    private int typeMessage;
 
     static final int REVIEW_DIALOG = 1;
     static final int ADS_DIALOG = 2;

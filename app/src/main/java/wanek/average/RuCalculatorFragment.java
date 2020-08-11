@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 
 
-public class FragmentRuCalculator extends FragmentCaclulator {
+public class RuCalculatorFragment extends BaseCalculatorFragment {
 
     private MaterialButton button_5;
     private MaterialButton button_4;
@@ -23,7 +23,6 @@ public class FragmentRuCalculator extends FragmentCaclulator {
     private TextView tvCountFiveForFive;
     private TextView tvCountFiveForFour;
     private TextView tvCountFourForFour;
-
 
 
     public void onCreate(Bundle bundle) {
@@ -39,9 +38,10 @@ public class FragmentRuCalculator extends FragmentCaclulator {
         } catch (NumberFormatException ex) {
             roundFour = 3.5;
         }
-        handleNotes = new HandleNotes(roundFive,roundFour);
+        notesControl = new NotesControl(roundFive,roundFour);
         super.onCreate(bundle);
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.culculator5_fragment,container,false);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -92,40 +92,42 @@ public class FragmentRuCalculator extends FragmentCaclulator {
                     v.animate().alphaBy(0.9f).alpha(1.0f).setDuration(80).start();
                     v.setBackgroundColor(getResources().getColor(R.color.bottomBackColor));
                     if (v.getId() == R.id.button_5) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(5)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(5)));
                     } else if (v.getId() == R.id.button_4) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(4)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(4)));
                     } else if (v.getId() == R.id.button_3) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(3)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(3)));
                     } else if (v.getId() == R.id.button_2) {
-                        tvScore.setText(String.valueOf(handleNotes.clickNote(2)));
+                        tvScore.setText(String.valueOf(notesControl.addNote(2)));
                     }
-                    tvBottom.setText(handleNotes.getNotesString());
-                    visibilityLayout(handleNotes.getAscoreNotes());
+                    tvBottom.setText(notesControl.getNotesToString());
+                    visibilityLayout(notesControl.getCurrentAscoreNotes());
                     break;
             }
             return true;
         }
     };
+
     void visibilityLayout(double score) { // анимация
         if (score == 0) {
             mlTopNote.transitionToStart();
             mlBottomNote.transitionToStart();
-        } else if(score >= handleNotes.getRoundFive()) {
+        } else if(score >= notesControl.getRoundFive()) {
             mlTopNote.transitionToStart();
             mlBottomNote.transitionToStart();
-        } else if(score < handleNotes.getRoundFive() && score >= handleNotes.getRoundFour()) {
+        } else if(score < notesControl.getRoundFive() && score >= notesControl.getRoundFour()) {
             mlBottomNote.transitionToStart();
             mlTopNote.transitionToEnd();
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
-        } else if (score < handleNotes.getRoundFour()) {
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(5,5),5)));
+        } else if (score < notesControl.getRoundFour()) {
             mlTopNote.transitionToEnd();
             mlBottomNote.transitionToEnd();
-            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,5),5)));
-            tvCountFiveForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(5,4),5)));
-            tvCountFourForFour.setText(textToSpannedWithUnderline(textNote(handleNotes.getHowManyNotes(4,4),4)));
+            tvCountFiveForFive.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(5,5),5)));
+            tvCountFiveForFour.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(5,4),5)));
+            tvCountFourForFour.setText(textToSpannedWithUnderline(textNote(notesControl.getHowManyNotes(4,4),4)));
         }
     }
+
     public String textNote(int countNote, int noteText) {
         if(countNote == 1 || ((countNote % 10 == 1) && (countNote != 11))) {
             if(noteText == 4) {

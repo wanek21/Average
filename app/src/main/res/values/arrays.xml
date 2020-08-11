@@ -12,11 +12,13 @@
 
     <integer-array name="assessment_system">
         <item>5</item>
+        <item>10</item>
         <item>12</item>
     </integer-array>
 
     <string-array name="assessment_system_values">
         <item>5-бальная</item>
+        <item>10-бальная</item>
         <item>12-бальная</item>
     </string-array>
 </resources>
