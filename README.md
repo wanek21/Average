@@ -3,4 +3,4 @@
 
 Google Play: https://play.google.com/store/apps/details?id=wanek.average
 
-Мое первое приложение, код далек от идеала
+Мое первое приложение, код очень плох
